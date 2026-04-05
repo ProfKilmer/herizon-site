@@ -11,22 +11,20 @@
     <!-- Navigation -->
     <nav class="nav">
         <div class="nav-container">
-            <div class="nav-logo">
-                <a href="index.html">HERIZON</a>
-            </div>
-            <div class="nav-links">
-                <a href="mission.html">Mission</a>
-                <a href="about.html">About</a>
-                <a href="conference.html" class="active">Conference</a>
-                <a href="resources.html">Resources</a>
-                <a href="discussions.html">Discussions</a>
-                <a href="connect.html">Connect</a>
-            </div>
-            <div class="hamburger" onclick="toggleHamburger()">
+            <a href="index.html" class="nav-logo">HERIZON</a>
+            <button class="hamburger" id="hamburger">
                 <span></span>
                 <span></span>
                 <span></span>
-            </div>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="mission.html">Mission</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="conference.html" class="active">Conference</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="discussions.html">Discussions</a></li>
+                <li><a href="connect.html">Connect</a></li>
+            </ul>
         </div>
     </nav>
 
@@ -354,11 +352,17 @@
             successMsg.style.display = 'block';
         }
 
-        // Toggle hamburger menu
-        function toggleHamburger() {
-            const navLinks = document.querySelector('.nav-links');
-            navLinks.classList.toggle('active');
-        }
+        // Mobile Hamburger Toggle
+        const hamburger = document.getElementById('hamburger');
+        const navLinksEl = document.getElementById('navLinks');
+        hamburger.addEventListener('click', function() {
+            navLinksEl.classList.toggle('open');
+        });
+        navLinksEl.querySelectorAll('a').forEach(item => {
+            item.addEventListener('click', function() {
+                navLinksEl.classList.remove('open');
+            });
+        });
     </script>
 </body>
 </html>

@@ -34,7 +34,8 @@ nav {
   font-size: 1.5rem; font-weight: 700; color: var(--warm-gold);
   letter-spacing: 3px; text-decoration: none;
 }
-.nav-links { display: flex; gap: 32px; list-style: none; }
+.nav-links { display: flex; gap: 32px; list-style: none; align-items: center; }
+.nav-links li { list-style: none; }
 .nav-links a {
   color: var(--text-light); text-decoration: none;
   font-size: 0.85rem; letter-spacing: 1.5px; text-transform: uppercase;

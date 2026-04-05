@@ -96,7 +96,7 @@
         const navLinks = document.getElementById('navLinks');
 
         hamburger.addEventListener('click', function() {
-            navLinks.classList.toggle('active');
+            navLinks.classList.toggle('open');
             hamburger.classList.toggle('active');
         });
 
@@ -104,7 +104,7 @@
         const navItems = navLinks.querySelectorAll('a');
         navItems.forEach(item => {
             item.addEventListener('click', function() {
-                navLinks.classList.remove('active');
+                navLinks.classList.remove('open');
                 hamburger.classList.remove('active');
             });
         });

@@ -9,22 +9,22 @@
 </head>
 <body>
     <!-- Navigation -->
-    <nav class="navbar">
+    <nav class="nav">
         <div class="nav-container">
-            <a href="index.html" class="logo">HERIZON</a>
-            <ul class="nav-links">
-                <li><a href="#mission">Mission</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#conference">Conference</a></li>
-                <li><a href="#resources">Resources</a></li>
-                <li><a href="discussions.html" class="active">Discussions</a></li>
-                <li><a href="#connect">Connect</a></li>
-            </ul>
-            <button class="hamburger" onclick="toggleHamburger()">
+            <a href="index.html" class="nav-logo">HERIZON</a>
+            <button class="hamburger" id="hamburger">
                 <span></span>
                 <span></span>
                 <span></span>
             </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="mission.html">Mission</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="conference.html">Conference</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="discussions.html" class="active">Discussions</a></li>
+                <li><a href="connect.html">Connect</a></li>
+            </ul>
         </div>
     </nav>
 
@@ -162,32 +162,9 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>HERIZON</h4>
-                <p>Empowering women through dialogue and shared experience.</p>
-            </div>
-            <div class="footer-section">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="#mission">Mission</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#conference">Conference</a></li>
-                    <li><a href="#resources">Resources</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Connect</h4>
-                <ul>
-                    <li><a href="#twitter">Twitter</a></li>
-                    <li><a href="#instagram">Instagram</a></li>
-                    <li><a href="#linkedin">LinkedIn</a></li>
-                    <li><a href="#email">Email</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2024 Herizon. All rights reserved.</p>
+        <div class="footer-container">
+            <div class="footer-logo">HERIZON</div>
+            <p class="footer-copyright">&copy; 2026 Herizon. All rights reserved. | Educate. Empower. Rise.</p>
         </div>
     </footer>
 
@@ -201,11 +178,19 @@
             'work-life-balance': 'Work-Life Balance'
         };
 
-        // Toggle hamburger menu
-        function toggleHamburger() {
-            const navLinks = document.querySelector('.nav-links');
-            navLinks.classList.toggle('active');
-        }
+        // Mobile Hamburger Toggle
+        const hamburger = document.getElementById('hamburger');
+        const navLinksEl = document.getElementById('navLinks');
+        hamburger.addEventListener('click', function() {
+            navLinksEl.classList.toggle('open');
+            hamburger.classList.toggle('active');
+        });
+        navLinksEl.querySelectorAll('a').forEach(item => {
+            item.addEventListener('click', function() {
+                navLinksEl.classList.remove('open');
+                hamburger.classList.remove('active');
+            });
+        });
 
         // Filter discussions by category
         function filterDisc(cat, btn) {
