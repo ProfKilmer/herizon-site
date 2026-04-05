@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discussions - Herizon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">HERIZON</a>
+            <ul class="nav-links">
+                <li><a href="#mission">Mission</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#conference">Conference</a></li>
+                <li><a href="#resources">Resources</a></li>
+                <li><a href="discussions.html" class="active">Discussions</a></li>
+                <li><a href="#connect">Connect</a></li>
+            </ul>
+            <button class="hamburger" onclick="toggleHamburger()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <h1>Discussion Board</h1>
+        <p class="subtitle">Share your experiences. Read others' stories. You're not alone.</p>
+    </header>
+
+    <!-- Main Content -->
+    <main class="section">
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <button class="disc-cat active" data-filter="all" onclick="filterDisc('all', this)">All</button>
+            <button class="disc-cat" data-filter="workplace" onclick="filterDisc('workplace', this)">Workplace</button>
+            <button class="disc-cat" data-filter="school" onclick="filterDisc('school', this)">School</button>
+            <button class="disc-cat" data-filter="negotiation" onclick="filterDisc('negotiation', this)">Negotiation</button>
+            <button class="disc-cat" data-filter="leadership" onclick="filterDisc('leadership', this)">Leadership</button>
+            <button class="disc-cat" data-filter="work-life-balance" onclick="filterDisc('work-life-balance', this)">Work-Life Balance</button>
+        </div>
+
+        <!-- Post Form -->
+        <div class="post-form">
+            <h3>Share Your Story</h3>
+            <form onsubmit="submitPost(event)">
+                <div class="form-group">
+                    <input
+                        type="text"
+                        id="postName"
+                        placeholder="Your name or 'Anonymous'"
+                        required
+                    >
+                </div>
+                <div class="form-group">
+                    <select id="postCategory" required>
+                        <option value="">Select a category</option>
+                        <option value="workplace">Workplace</option>
+                        <option value="school">School</option>
+                        <option value="negotiation">Negotiation</option>
+                        <option value="leadership">Leadership</option>
+                        <option value="work-life-balance">Work-Life Balance</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input
+                        type="text"
+                        id="postTitle"
+                        placeholder="Post title"
+                        required
+                    >
+                </div>
+                <div class="form-group">
+                    <textarea
+                        id="postBody"
+                        placeholder="Share your story..."
+                        rows="5"
+                        required
+                    ></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Submit</button>
+            </form>
+        </div>
+
+        <!-- Discussion Feed -->
+        <div id="discFeed" class="disc-grid">
+            <!-- Sample Post 1 -->
+            <div class="disc-card" data-cat="school">
+                <div class="disc-card-header">
+                    <span class="disc-card-cat">School</span>
+                    <span class="disc-card-date">2 days ago</span>
+                </div>
+                <h4>When My Teacher Said Girls Aren't Good at Math</h4>
+                <p>I'll never forget when my high school algebra teacher told the class that girls naturally struggle with math. It was frustrating and disheartening. But instead of accepting it, I decided to prove her wrong. I studied harder, asked more questions, and ended up getting an A in her class. Now I'm in college studying engineering. Your biases don't define my potential.</p>
+                <div class="disc-card-footer">
+                    <span class="disc-author">Maya</span>
+                    <button class="like-btn" onclick="toggleLike(this)">
+                        <span class="heart">&#9825;</span>
+                        <span class="count">42</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sample Post 2 -->
+            <div class="disc-card" data-cat="workplace">
+                <div class="disc-card-header">
+                    <span class="disc-card-cat">Workplace</span>
+                    <span class="disc-card-date">1 week ago</span>
+                </div>
+                <h4>Negotiating My First Raise — And Getting It</h4>
+                <p>As a young woman entering the workforce, I was terrified to ask for a raise. I thought I'd seem ungrateful or too aggressive. But after six months of stellar performance, I realized I was being underpaid compared to my peers. I did my research, gathered evidence of my contributions, and scheduled a meeting with my manager. The conversation went so much better than I expected. I got the raise!</p>
+                <div class="disc-card-footer">
+                    <span class="disc-author">Jordan</span>
+                    <button class="like-btn" onclick="toggleLike(this)">
+                        <span class="heart">&#9825;</span>
+                        <span class="count">89</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sample Post 3 -->
+            <div class="disc-card" data-cat="negotiation">
+                <div class="disc-card-header">
+                    <span class="disc-card-cat">Negotiation</span>
+                    <span class="disc-card-date">3 days ago</span>
+                </div>
+                <h4>Learning to Say No Without Guilt</h4>
+                <p>I used to say yes to everything, worried that saying no would disappoint people or hurt my image. But constantly overcommitting left me exhausted and unable to do my best work. I've been learning that saying no is actually a form of self-respect and necessary boundary-setting. It's been tough, but I'm noticing that people respect me more when I'm honest about my capacity. Saying no to good things makes room for great things.</p>
+                <div class="disc-card-footer">
+                    <span class="disc-author">Priya</span>
+                    <button class="like-btn" onclick="toggleLike(this)">
+                        <span class="heart">&#9825;</span>
+                        <span class="count">156</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Sample Post 4 -->
+            <div class="disc-card" data-cat="leadership">
+                <div class="disc-card-header">
+                    <span class="disc-card-cat">Leadership</span>
+                    <span class="disc-card-date">5 days ago</span>
+                </div>
+                <h4>Running for Student Body President</h4>
+                <p>A lot of people doubted whether I could win a school-wide election. There were comments about my appearance, my background, whether I was "cut out" for leadership. Some days I wanted to quit. But I believed in my platform and my vision for our school. I campaigned hard, stayed focused on what mattered, and ignored the noise. I won. And now I'm using this role to make real change. Never let other people's stereotypes become your ceiling.</p>
+                <div class="disc-card-footer">
+                    <span class="disc-author">Aisha</span>
+                    <button class="like-btn" onclick="toggleLike(this)">
+                        <span class="heart">&#9825;</span>
+                        <span class="count">203</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>HERIZON</h4>
+                <p>Empowering women through dialogue and shared experience.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#mission">Mission</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#conference">Conference</a></li>
+                    <li><a href="#resources">Resources</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Connect</h4>
+                <ul>
+                    <li><a href="#twitter">Twitter</a></li>
+                    <li><a href="#instagram">Instagram</a></li>
+                    <li><a href="#linkedin">LinkedIn</a></li>
+                    <li><a href="#email">Email</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Herizon. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Category labels for display
+        const catLabels = {
+            'workplace': 'Workplace',
+            'school': 'School',
+            'negotiation': 'Negotiation',
+            'leadership': 'Leadership',
+            'work-life-balance': 'Work-Life Balance'
+        };
+
+        // Toggle hamburger menu
+        function toggleHamburger() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('active');
+        }
+
+        // Filter discussions by category
+        function filterDisc(cat, btn) {
+            // Update active button
+            document.querySelectorAll('.disc-cat').forEach(button => {
+                button.classList.remove('active');
+            });
+            btn.classList.add('active');
+
+            // Filter cards
+            const cards = document.querySelectorAll('.disc-card');
+            cards.forEach(card => {
+                if (cat === 'all' || card.getAttribute('data-cat') === cat) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Toggle like button
+        function toggleLike(btn) {
+            btn.classList.toggle('liked');
+            const heart = btn.querySelector('.heart');
+            const count = btn.querySelector('.count');
+            const currentCount = parseInt(count.textContent);
+
+            if (btn.classList.contains('liked')) {
+                heart.textContent = '&#9829;';
+                count.textContent = currentCount + 1;
+            } else {
+                heart.textContent = '&#9825;';
+                count.textContent = currentCount - 1;
+            }
+        }
+
+        // Submit a new post
+        function submitPost(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('postName').value.trim();
+            const category = document.getElementById('postCategory').value;
+            const title = document.getElementById('postTitle').value.trim();
+            const body = document.getElementById('postBody').value.trim();
+
+            // Validate
+            if (!name || !category || !title || !body) {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            // Create new card
+            const newCard = document.createElement('div');
+            newCard.className = 'disc-card';
+            newCard.setAttribute('data-cat', category);
+            newCard.innerHTML = `
+                <div class="disc-card-header">
+                    <span class="disc-card-cat">${catLabels[category]}</span>
+                    <span class="disc-card-date">just now</span>
+                </div>
+                <h4>${escapeHtml(title)}</h4>
+                <p>${escapeHtml(body)}</p>
+                <div class="disc-card-footer">
+                    <span class="disc-author">${escapeHtml(name)}</span>
+                    <button class="like-btn" onclick="toggleLike(this)">
+                        <span class="heart">&#9825;</span>
+                        <span class="count">0</span>
+                    </button>
+                </div>
+            `;
+
+            // Prepend to feed
+            const feed = document.getElementById('discFeed');
+            feed.insertBefore(newCard, feed.firstChild);
+
+            // Clear form
+            document.getElementById('postName').value = '';
+            document.getElementById('postCategory').value = '';
+            document.getElementById('postTitle').value = '';
+            document.getElementById('postBody').value = '';
+
+            // Show success message
+            alert('Your story has been posted!');
+        }
+
+        // Helper function to escape HTML
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+    </script>
+</body>
+</html>

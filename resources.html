@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resource Library - Herizon</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">HERIZON</a>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="mission.html">Mission</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="conference.html">Conference</a></li>
+                <li><a href="resources.html" class="active">Resources</a></li>
+                <li><a href="discussions.html">Discussions</a></li>
+                <li><a href="connect.html">Connect</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <h1>Resource Library</h1>
+        <p>Curated reading, research, and insights to support your journey. Explore our collection of books, articles, and studies on women's leadership, workplace equity, and personal empowerment.</p>
+    </header>
+
+    <!-- Resources Section -->
+    <section class="section">
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <button class="resource-tab active" onclick="filterResources('all', this)">All</button>
+            <button class="resource-tab" onclick="filterResources('book', this)">Books</button>
+            <button class="resource-tab" onclick="filterResources('article', this)">Articles</button>
+            <button class="resource-tab" onclick="filterResources('research', this)">Research</button>
+        </div>
+
+        <!-- Resource Grid -->
+        <div class="resource-grid">
+            <!-- Book 1 -->
+            <div class="resource-card" data-type="book">
+                <span class="resource-type">Book</span>
+                <h4>Lean In</h4>
+                <span class="resource-author">by Sheryl Sandberg</span>
+                <p>A powerful exploration of women, work, and the will to lead. Sheryl Sandberg offers practical advice and inspiring insights on how women can overcome barriers to reach their full potential in the workplace and beyond.</p>
+            </div>
+
+            <!-- Book 2 -->
+            <div class="resource-card" data-type="book">
+                <span class="resource-type">Book</span>
+                <h4>Untamed</h4>
+                <span class="resource-author">by Glennon Doyle</span>
+                <p>A transformative guide to trusting yourself and reclaiming your power. Doyle challenges the expectations society places on women and encourages readers to listen to their inner voice and live authentically.</p>
+            </div>
+
+            <!-- Book 3 -->
+            <div class="resource-card" data-type="book">
+                <span class="resource-type">Book</span>
+                <h4>The Confidence Code</h4>
+                <span class="resource-author">by Katty Kay & Claire Shipman</span>
+                <p>An exploration of the science and art of self-assurance. Based on groundbreaking research, this book reveals what confidence really is and how women can develop it to succeed in every aspect of their lives.</p>
+            </div>
+
+            <!-- Article 1 -->
+            <div class="resource-card" data-type="article">
+                <span class="resource-type">Article</span>
+                <h4>The Gender Pay Gap: What It Is and Why It Persists</h4>
+                <span class="resource-author">Various Authors</span>
+                <p>An in-depth overview of wage inequality between genders. This article examines the causes, impacts, and potential solutions to closing the gender pay gap in modern workplaces across industries.</p>
+            </div>
+
+            <!-- Article 2 -->
+            <div class="resource-card" data-type="article">
+                <span class="resource-type">Article</span>
+                <h4>How Young Women Are Redefining Leadership</h4>
+                <span class="resource-author">Various Authors</span>
+                <p>A look at emerging leadership styles and approaches among young women professionals. Discover how this generation is challenging traditional models and bringing fresh perspectives to leadership roles.</p>
+            </div>
+
+            <!-- Research -->
+            <div class="resource-card" data-type="research">
+                <span class="resource-type">Research</span>
+                <h4>Women in the Workplace 2025</h4>
+                <span class="resource-author">McKinsey & LeanIn.Org</span>
+                <p>The annual study on the state of women in corporate America. This comprehensive research examines hiring, promotion, attrition, and representation of women across levels and industries.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-logo">HERIZON</div>
+            <p class="footer-copyright">© 2026 Herizon. All rights reserved. | Educate. Empower. Rise.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Hamburger menu toggle
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        hamburger.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        });
+
+        // Close menu when a link is clicked
+        const navItems = navLinks.querySelectorAll('a');
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                navLinks.classList.remove('active');
+                hamburger.classList.remove('active');
+            });
+        });
+
+        // Filter resources function
+        function filterResources(type, btn) {
+            // Remove active class from all tabs
+            const allTabs = document.querySelectorAll('.resource-tab');
+            allTabs.forEach(tab => tab.classList.remove('active'));
+
+            // Add active class to clicked tab
+            btn.classList.add('active');
+
+            // Show/hide resource cards
+            const allCards = document.querySelectorAll('.resource-card');
+            allCards.forEach(card => {
+                if (type === 'all') {
+                    card.style.display = 'block';
+                } else if (card.getAttribute('data-type') === type) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

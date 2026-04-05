@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connect With Us - Herizon</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">HERIZON</a>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="mission.html">Mission</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="conference.html">Conference</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="discussions.html">Discussions</a></li>
+                <li><a href="connect.html" class="active">Connect</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <h1>Connect With Us</h1>
+        <p>Join the movement. Stay informed. Rise together.</p>
+    </section>
+
+    <!-- Connect Section -->
+    <section class="section section-dark">
+        <div class="connect-grid">
+            <!-- Left Column: Subscribe Form -->
+            <div class="subscribe-form">
+                <h3>Join the Herizon Community</h3>
+                <form onsubmit="handleSubscribe(event)">
+                    <input type="text" id="fullName" placeholder="Full Name" required>
+                    <input type="email" id="email" placeholder="Email" required>
+                    <select id="hearAbout" required>
+                        <option value="">How did you hear about us?</option>
+                        <option value="Social Media">Social Media</option>
+                        <option value="Friend/Family">Friend/Family</option>
+                        <option value="School">School</option>
+                        <option value="Conference">Conference</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <button type="submit" class="btn-primary">Join the Movement</button>
+                </form>
+                <div id="subscribeMsg" class="subscribeMsg" style="display: none; margin-top: 20px; padding: 16px; border-radius: 8px; background-color: rgba(201, 168, 76, 0.2); color: var(--warm-gold); text-align: center; font-size: 0.95rem;">
+                    Thank you for joining the movement. We'll be in touch.
+                </div>
+            </div>
+
+            <!-- Right Column: Contact Info & Social Links -->
+            <div class="connect-info">
+                <h3>Other Ways to Reach Us</h3>
+                <p style="color: rgba(255,255,255,0.85); font-size: 0.95rem; line-height: 1.7; margin-bottom: 20px;">
+                    Have questions about Herizon? Want to speak at our conference or explore partnership opportunities? We'd love to hear from you. Reach out at <strong>hello@herizon.org</strong> and let's connect.
+                </p>
+                <div class="social-links">
+                    <a href="#" class="social-link" title="Instagram">IG</a>
+                    <a href="#" class="social-link" title="LinkedIn">in</a>
+                    <a href="#" class="social-link" title="TikTok">TT</a>
+                    <a href="#" class="social-link" title="X">X</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-logo">HERIZON</div>
+            <p class="footer-copyright">© 2026 Herizon. All rights reserved. | Educate. Empower. Rise.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Handle Subscribe Form
+        function handleSubscribe(event) {
+            event.preventDefault();
+
+            // Get form values
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const hearAbout = document.getElementById('hearAbout').value;
+
+            // Clear form
+            document.getElementById('fullName').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('hearAbout').value = '';
+
+            // Show success message
+            const subscribeMsg = document.getElementById('subscribeMsg');
+            subscribeMsg.style.display = 'block';
+
+            // Hide message after 4 seconds
+            setTimeout(function() {
+                subscribeMsg.style.display = 'none';
+            }, 4000);
+        }
+
+        // Mobile Hamburger Toggle
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        hamburger.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        });
+
+        // Close menu when a link is clicked
+        const navItems = navLinks.querySelectorAll('a');
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                navLinks.classList.remove('active');
+                hamburger.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>

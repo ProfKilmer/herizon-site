@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Herizon - Educate. Empower. Rise.</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">HERIZON</a>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="mission.html">Mission</a></li>
+                <li><a href="about.html" class="active">About</a></li>
+                <li><a href="conference.html">Conference</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="discussions.html">Discussions</a></li>
+                <li><a href="connect.html">Connect</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <h1>About Herizon</h1>
+        <p>Our story, our values, and the community building the future together</p>
+    </section>
+
+    <!-- Origin Story Section -->
+    <section class="section">
+        <h2>Our Story</h2>
+        <p style="max-width: 800px; margin: 24px 0; font-size: 1.05rem; line-height: 1.8; color: #555;">
+            Herizon was founded in 2026 with a simple but powerful belief: young women deserve spaces where they can learn from one another, share their authentic experiences, and rise together. We recognized that navigating the world as a young woman comes with unique challenges—barriers that aren't always visible, biases both internal and external, and difficult tradeoffs that can feel isolating. Too often, young women face these journeys alone.
+        </p>
+        <p style="max-width: 800px; margin: 24px 0; font-size: 1.05rem; line-height: 1.8; color: #555;">
+            Herizon was created to change that. We exist to build a movement that disrupts isolation and creates connection. By bringing together brilliant young women from diverse backgrounds, fields, and life stages, we create a platform where challenges become conversations, experiences become wisdom, and individual journeys become collective power. Our mission is to ensure that every young woman has access to the knowledge, mentorship, and community she needs to not just survive in her field—but to thrive and lead on her own terms.
+        </p>
+        <p style="max-width: 800px; margin: 24px 0; font-size: 1.05rem; line-height: 1.8; color: #555;">
+            From our conference to our online community, from curated resources to open discussions, every aspect of Herizon is designed with one goal in mind: to expand her horizon and empower her to reach her full potential.
+        </p>
+    </section>
+
+    <!-- Pillars Section -->
+    <section class="section">
+        <h2>Our Pillars</h2>
+        <div class="pillars">
+            <div class="pillar">
+                <div class="pillar-icon">🤝</div>
+                <h3>Community</h3>
+                <p>We believe that young women are stronger together. Our community brings women from all walks of life into spaces where they feel seen, heard, and valued. Through shared experiences and genuine connection, we break the isolation that many feel and create bonds that last.</p>
+            </div>
+            <div class="pillar">
+                <div class="pillar-icon">📚</div>
+                <h3>Knowledge</h3>
+                <p>Education and awareness are the foundation of empowerment. We curate cutting-edge research, expert insights, and real-world advice on the challenges young women face—from career navigation to wellbeing to leadership. Our resources are designed to equip, inspire, and inform.</p>
+            </div>
+            <div class="pillar">
+                <div class="pillar-icon">✨</div>
+                <h3>Action</h3>
+                <p>Awareness without action is just information. We transform conversations into momentum. Whether it's advocating for systemic change, launching initiatives in local communities, or making personal breakthroughs, Herizon is where inspiration becomes tangible impact.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Looking Ahead Section -->
+    <section class="section section-dark">
+        <h2>Looking Ahead</h2>
+        <p class="lead" style="max-width: 750px; margin: 24px auto 0;">
+            The Herizon community is growing, and so are our ambitions. Over the coming years, we're committed to expanding our annual conference to reach more cities and more young women. We're building a robust online community platform where conversations continue year-round, where resources are always accessible, and where support is just a click away. We're also partnering with schools and educational institutions to introduce Herizon's mission and content to the next generation of young women, ensuring that support for her growth starts early. Every step forward is about deepening the movement and making sure no young woman navigates her journey alone.
+        </p>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-logo">HERIZON</div>
+            <p class="footer-copyright">© 2026 Herizon. All rights reserved. | Educate. Empower. Rise.</p>
+        </div>
+    </footer>
+
+    <!-- Mobile Hamburger Toggle Script -->
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+
+        hamburger.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        });
+
+        // Close menu when a link is clicked
+        const navItems = navLinks.querySelectorAll('a');
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                navLinks.classList.remove('active');
+                hamburger.classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html>

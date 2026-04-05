@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conference - Herizon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="index.html">HERIZON</a>
+            </div>
+            <div class="nav-links">
+                <a href="mission.html">Mission</a>
+                <a href="about.html">About</a>
+                <a href="conference.html" class="active">Conference</a>
+                <a href="resources.html">Resources</a>
+                <a href="discussions.html">Discussions</a>
+                <a href="connect.html">Connect</a>
+            </div>
+            <div class="hamburger" onclick="toggleHamburger()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>National High School Women's Conference</h1>
+        <p class="subtitle">1st Annual · [Date TBD] · [Location TBD]</p>
+    </div>
+
+    <!-- Conference Sub-Tab Navigation -->
+    <div class="conf-tabs">
+        <button class="conf-tab active" onclick="showConfTab('overview', this)">Overview</button>
+        <button class="conf-tab" onclick="showConfTab('speakers', this)">Speakers</button>
+        <button class="conf-tab" onclick="showConfTab('schedule', this)">Schedule</button>
+        <button class="conf-tab" onclick="showConfTab('faqs', this)">FAQs</button>
+        <button class="conf-tab" onclick="showConfTab('register', this)">Register</button>
+        <button class="conf-tab" onclick="showConfTab('sponsors', this)">Sponsors</button>
+    </div>
+
+    <!-- Conference Content Panels -->
+    <div class="conf-content">
+        <!-- Overview Panel -->
+        <div id="overview" class="conf-panel active">
+            <div class="section">
+                <h2>Conference Overview</h2>
+                <p>Join us for an inspiring day of panels, workshops, and keynotes designed to empower the next generation of women leaders. Hear from accomplished speakers, develop practical skills, and build meaningful connections with peers and mentors across the nation.</p>
+
+                <h3>Session Tracks</h3>
+                <div class="schedule-grid">
+                    <div class="schedule-card">
+                        <h4>Breaking Barriers in STEM</h4>
+                        <p class="time">Time TBD</p>
+                        <p>Explore pathways in science, technology, engineering, and mathematics with leaders breaking through gender gaps in these fields.</p>
+                    </div>
+                    <div class="schedule-card">
+                        <h4>Negotiation & Self-Advocacy</h4>
+                        <p class="time">Time TBD</p>
+                        <p>Learn essential skills to advocate for yourself in academics, careers, and personal relationships.</p>
+                    </div>
+                    <div class="schedule-card">
+                        <h4>Leadership Without Permission</h4>
+                        <p class="time">Time TBD</p>
+                        <p>Discover how to step into leadership roles and create change before waiting for formal authority or invitation.</p>
+                    </div>
+                    <div class="schedule-card">
+                        <h4>Financial Literacy & Independence</h4>
+                        <p class="time">Time TBD</p>
+                        <p>Build foundational knowledge in budgeting, investing, and financial planning for your future.</p>
+                    </div>
+                    <div class="schedule-card">
+                        <h4>Mental Health & Resilience</h4>
+                        <p class="time">Time TBD</p>
+                        <p>Develop tools and strategies to support your mental wellness and build resilience through challenges.</p>
+                    </div>
+                    <div class="schedule-card">
+                        <h4>Building Your Network</h4>
+                        <p class="time">Time TBD</p>
+                        <p>Master the art of authentic networking and building relationships that matter for your personal and professional growth.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Speakers Panel -->
+        <div id="speakers" class="conf-panel">
+            <div class="section">
+                <h2>Meet Our Speakers</h2>
+                <p>Learn from accomplished women leaders and innovators across various fields.</p>
+
+                <div class="speakers-grid">
+                    <div class="speaker-card">
+                        <div class="speaker-avatar">A</div>
+                        <h3>Dr. Amara Osei</h3>
+                        <p class="speaker-title">Keynote Speaker</p>
+                        <p class="speaker-bio">A biomedical engineer and advocate for diversity in STEM, Dr. Osei has led groundbreaking research and mentorship initiatives.</p>
+                    </div>
+                    <div class="speaker-card">
+                        <div class="speaker-avatar">E</div>
+                        <h3>Prof. Elena Vasquez</h3>
+                        <p class="speaker-title">Workshop Leader</p>
+                        <p class="speaker-bio">Economics professor specializing in financial literacy for underrepresented communities. An author and policy advisor.</p>
+                    </div>
+                    <div class="speaker-card">
+                        <div class="speaker-avatar">J</div>
+                        <h3>Jordan Mitchell</h3>
+                        <p class="speaker-title">Panel Moderator</p>
+                        <p class="speaker-bio">Award-winning journalist and women's advocacy leader with expertise in storytelling and social impact.</p>
+                    </div>
+                    <div class="speaker-card">
+                        <div class="speaker-avatar">P</div>
+                        <h3>Dr. Priya Sharma</h3>
+                        <p class="speaker-title">Workshop Leader</p>
+                        <p class="speaker-bio">Clinical psychologist and mental health advocate focused on resilience building for young women.</p>
+                    </div>
+                    <div class="speaker-card">
+                        <div class="speaker-avatar">M</div>
+                        <h3>Maya Chen</h3>
+                        <p class="speaker-title">Keynote Speaker</p>
+                        <p class="speaker-bio">Entrepreneur and startup founder dedicated to empowering women in tech and breaking traditional career paths.</p>
+                    </div>
+                    <div class="speaker-card">
+                        <div class="speaker-avatar">A</div>
+                        <h3>Aisha Williams</h3>
+                        <p class="speaker-title">Panel Moderator</p>
+                        <p class="speaker-bio">Community organizer and youth leader with a passion for grassroots advocacy and leadership development.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schedule Panel -->
+        <div id="schedule" class="conf-panel">
+            <div class="section">
+                <h2>Conference Schedule</h2>
+                <p>A full day of inspiring sessions, networking, and growth.</p>
+
+                <div class="schedule-timeline">
+                    <div class="schedule-card">
+                        <p class="time">8:00 AM</p>
+                        <h3>Registration & Welcome</h3>
+                        <p>Check-in and morning refreshments. Meet other attendees and pick up your conference materials.</p>
+                    </div>
+                    <div class="schedule-card">
+                        <p class="time">9:00 AM</p>
+                        <h3>Opening Keynote</h3>
+                        <p>Inspiring address setting the tone for the day and introducing our conference theme.</p>
+                    </div>
+                    <div class="schedule-card">
+                        <p class="time">10:00 AM</p>
+                        <h3>Morning Panels</h3>
+                        <p>Choose from our first round of breakout panels across all six session tracks.</p>
+                    </div>
+                    <div class="schedule-card">
+                        <p class="time">11:15 AM</p>
+                        <h3>Workshop Session I</h3>
+                        <p>Interactive workshops with hands-on learning and small group discussions.</p>
+                    </div>
+                    <div class="schedule-card">
+                        <p class="time">12:15 PM</p>
+                        <h3>Lunch & Networking</h3>
+                        <p>Catered lunch with networking tables. Connect with speakers, mentors, and fellow attendees.</p>
+                    </div>
+                    <div class="schedule-card">
+                        <p class="time">1:30 PM</p>
+                        <h3>Workshop Session II</h3>
+                        <p>Second round of interactive workshops with different tracks to choose from.</p>
+                    </div>
+                    <div class="schedule-card">
+                        <p class="time">3:00 PM</p>
+                        <h3>Closing Keynote</h3>
+                        <p>Powerful closing remarks and inspiration to carry forward what you've learned.</p>
+                    </div>
+                    <div class="schedule-card">
+                        <p class="time">4:00 PM</p>
+                        <h3>Reception & Networking</h3>
+                        <p>Continue connections with light refreshments and informal conversations with speakers and peers.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQs Panel -->
+        <div id="faqs" class="conf-panel">
+            <div class="section">
+                <h2>Frequently Asked Questions</h2>
+
+                <div class="faq-list">
+                    <div class="faq-item">
+                        <div class="faq-q toggle" onclick="toggleFaq(this)">Who can attend?</div>
+                        <div class="faq-a">This conference is designed for high school women (grades 9-12). We welcome students of all backgrounds, interests, and experience levels. All attendees should be prepared to engage respectfully with peers and speakers.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q toggle" onclick="toggleFaq(this)">Is there a cost?</div>
+                        <div class="faq-a">Details on registration costs and any scholarship opportunities will be announced closer to the conference date. We are committed to ensuring cost is not a barrier to attendance.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q toggle" onclick="toggleFaq(this)">What should I bring?</div>
+                        <div class="faq-a">Bring a notebook and pen for taking notes. Comfortable shoes are recommended as you'll be moving between sessions. A water bottle is helpful to stay hydrated throughout the day.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q toggle" onclick="toggleFaq(this)">Will meals be provided?</div>
+                        <div class="faq-a">Yes! Breakfast snacks and lunch will be provided. We will accommodate common dietary restrictions—please note these during registration.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q toggle" onclick="toggleFaq(this)">Can I volunteer or speak?</div>
+                        <div class="faq-a">We'd love your involvement! Please reach out through our Connect page to express interest in volunteering, speaking, or leading a workshop.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-q toggle" onclick="toggleFaq(this)">How do I get there?</div>
+                        <div class="faq-a">Location details and transportation information will be provided once the venue is confirmed. We're exploring options to ensure accessibility for all attendees.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Register Panel -->
+        <div id="register" class="conf-panel">
+            <div class="section">
+                <h2>Register for the Conference</h2>
+                <p>Secure your spot at the National High School Women's Conference.</p>
+
+                <form class="register-form" onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label for="fullName">Full Name *</label>
+                        <input type="text" id="fullName" name="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="schoolName">School Name *</label>
+                        <input type="text" id="schoolName" name="schoolName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gradeLevel">Grade Level *</label>
+                        <select id="gradeLevel" name="gradeLevel" required>
+                            <option value="">Select a grade</option>
+                            <option value="9">9th Grade</option>
+                            <option value="10">10th Grade</option>
+                            <option value="11">11th Grade</option>
+                            <option value="12">12th Grade</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-primary">Register Now</button>
+                </form>
+
+                <div id="registerSuccess" class="success-message" style="display: none;">
+                    <p>Thank you for registering! We've sent a confirmation email. We can't wait to see you at the conference!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sponsors Panel -->
+        <div id="sponsors" class="conf-panel">
+            <div class="section">
+                <h2>Our Sponsors</h2>
+                <p>We're grateful to our partners who make this conference possible. Interested in joining them?</p>
+
+                <div class="sponsors-grid">
+                    <div class="sponsor-card">
+                        <p class="sponsor-level">Platinum</p>
+                        <h3>TechLead Innovations</h3>
+                        <p>Leading the way in women in technology initiatives.</p>
+                    </div>
+                    <div class="sponsor-card">
+                        <p class="sponsor-level">Gold</p>
+                        <h3>Future Leaders Fund</h3>
+                        <p>Investing in youth leadership and development.</p>
+                    </div>
+                    <div class="sponsor-card">
+                        <p class="sponsor-level">Silver</p>
+                        <h3>GrowthPath Consulting</h3>
+                        <p>Career development and mentorship programs.</p>
+                    </div>
+                    <div class="sponsor-card">
+                        <p class="sponsor-level">Bronze</p>
+                        <h3>Community Learning Center</h3>
+                        <p>Supporting educational initiatives for underrepresented youth.</p>
+                    </div>
+                </div>
+
+                <div class="sponsorship-cta">
+                    <h3>Interested in Sponsoring?</h3>
+                    <p>Help us expand the impact of this conference. <a href="connect.html">Get in touch with our team</a> to learn about sponsorship opportunities.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-logo">HERIZON</div>
+            <div class="footer-links">
+                <a href="mission.html">Mission</a>
+                <a href="about.html">About</a>
+                <a href="conference.html">Conference</a>
+                <a href="resources.html">Resources</a>
+                <a href="discussions.html">Discussions</a>
+                <a href="connect.html">Connect</a>
+            </div>
+            <div class="footer-text">
+                <p>&copy; 2026 Herizon. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Show conference tab
+        function showConfTab(panelId, btn) {
+            // Hide all panels
+            const panels = document.querySelectorAll('.conf-panel');
+            panels.forEach(panel => panel.classList.remove('active'));
+
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.conf-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Show selected panel
+            const selectedPanel = document.getElementById(panelId);
+            if (selectedPanel) {
+                selectedPanel.classList.add('active');
+            }
+
+            // Add active class to clicked button
+            btn.classList.add('active');
+        }
+
+        // Toggle FAQ answers
+        function toggleFaq(el) {
+            const faqItem = el.parentElement;
+            faqItem.classList.toggle('open');
+        }
+
+        // Handle registration form submission
+        function handleRegister(event) {
+            event.preventDefault();
+
+            // Hide form and show success message
+            const form = document.querySelector('.register-form');
+            const successMsg = document.getElementById('registerSuccess');
+
+            form.style.display = 'none';
+            successMsg.style.display = 'block';
+        }
+
+        // Toggle hamburger menu
+        function toggleHamburger() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
