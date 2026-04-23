@@ -67,8 +67,8 @@ nav {
   font-style: italic; color: var(--warm-gold);
 }
 .hero p {
-  max-width: 600px; font-size: 1.1rem; color: var(--text-light);
-  margin-bottom: 48px; line-height: 1.8;
+  max-width: 720px; font-size: 1.1rem; color: var(--text-light);
+  margin: 0 auto 48px; line-height: 1.8; text-align: center;
 }
 .hero-btns { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
 
