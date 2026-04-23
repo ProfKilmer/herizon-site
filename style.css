@@ -360,6 +360,34 @@ nav {
   background: var(--ivory);
 }
 
+/* ── Team Page ── */
+.team-founder {
+  display: flex; gap: 40px; align-items: center;
+  margin-top: 32px; flex-wrap: wrap;
+}
+.team-photo-placeholder {
+  width: 200px; height: 240px; border-radius: 12px;
+  background: linear-gradient(135deg, var(--navy), var(--plum));
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-light); font-size: 0.9rem; flex-shrink: 0;
+}
+.team-founder-info h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem; color: var(--navy); margin-bottom: 4px;
+}
+.team-role {
+  font-size: 0.85rem; color: var(--warm-gold); letter-spacing: 1px;
+  text-transform: uppercase; margin-bottom: 12px;
+}
+.team-bio { font-size: 0.95rem; color: #555; line-height: 1.7; max-width: 500px; }
+.pillar-icon-circle {
+  width: 50px; height: 50px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--navy), var(--plum));
+  display: flex; align-items: center; justify-content: center;
+  color: var(--warm-gold); font-size: 1.1rem; font-weight: 600;
+  margin-bottom: 16px;
+}
+
 /* ── Footer ── */
 footer {
   text-align: center; padding: 40px 8%;

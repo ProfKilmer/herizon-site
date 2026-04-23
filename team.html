@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Team - Herizon</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">HERIZON</a>
+            <button class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="mission.html">Mission</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="team.html" class="active">Team</a></li>
+                <li><a href="conference.html">Conference</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li><a href="discussions.html">Discussions</a></li>
+                <li><a href="connect.html">Connect</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <h1>Our Team</h1>
+        <p>The people behind Herizon — building a platform for young women to rise.</p>
+    </section>
+
+    <!-- Founder Section -->
+    <section class="section">
+        <span class="section-label">Founder</span>
+        <div class="team-founder">
+            <div class="team-photo-placeholder">
+                <span>Photo Coming Soon</span>
+            </div>
+            <div class="team-founder-info">
+                <h2>Aria Malhotra</h2>
+                <p class="team-role">Founder</p>
+                <p class="team-bio">Bio coming soon.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Adult Advisors Section -->
+    <section class="section section-dark">
+        <span class="section-label">Adult Advisors</span>
+        <h2>Advisory Board</h2>
+        <div class="pillars">
+            <div class="pillar">
+                <div class="pillar-icon-circle">1</div>
+                <h3>To Be Named</h3>
+                <p class="team-role">Advisor</p>
+            </div>
+            <div class="pillar">
+                <div class="pillar-icon-circle">2</div>
+                <h3>To Be Named</h3>
+                <p class="team-role">Advisor</p>
+            </div>
+            <div class="pillar">
+                <div class="pillar-icon-circle">3</div>
+                <h3>To Be Named</h3>
+                <p class="team-role">Advisor</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Teen Board Members Section -->
+    <section class="section">
+        <span class="section-label">Teen Leadership</span>
+        <h2>Teen Board Members</h2>
+        <div class="pillars">
+            <div class="pillar">
+                <div class="pillar-icon-circle">1</div>
+                <h3>To Be Named</h3>
+                <p class="team-role">Teen Board Member</p>
+            </div>
+            <div class="pillar">
+                <div class="pillar-icon-circle">2</div>
+                <h3>To Be Named</h3>
+                <p class="team-role">Teen Board Member</p>
+            </div>
+            <div class="pillar">
+                <div class="pillar-icon-circle">3</div>
+                <h3>To Be Named</h3>
+                <p class="team-role">Teen Board Member</p>
+            </div>
+            <div class="pillar">
+                <div class="pillar-icon-circle">4</div>
+                <h3>To Be Named</h3>
+                <p class="team-role">Teen Board Member</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-logo">HERIZON</div>
+            <p class="footer-copyright">&copy; 2026 Herizon. All rights reserved. | Educate. Empower. Rise.</p>
+        </div>
+    </footer>
+
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('navLinks');
+        hamburger.addEventListener('click', function() {
+            navLinks.classList.toggle('open');
+        });
+        navLinks.querySelectorAll('a').forEach(item => {
+            item.addEventListener('click', function() {
+                navLinks.classList.remove('open');
+            });
+        });
+    </script>
+</body>
+</html>
