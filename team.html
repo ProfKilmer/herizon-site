@@ -40,7 +40,7 @@
     <!-- Founder Section -->
     <section class="section">
         <span class="section-label">Founder</span>
-        <div class="team-founder">
+        <div class="team-founder" id="founderContent">
             <div class="team-photo-placeholder">
                 <span>Photo Coming Soon</span>
             </div>
@@ -56,7 +56,7 @@
     <section class="section section-dark">
         <span class="section-label">Adult Advisors</span>
         <h2>Advisory Board</h2>
-        <div class="pillars">
+        <div class="pillars" id="advisorContent">
             <div class="pillar">
                 <div class="pillar-icon-circle">1</div>
                 <h3>To Be Named</h3>
@@ -79,7 +79,7 @@
     <section class="section">
         <span class="section-label">Teen Leadership</span>
         <h2>Teen Board Members</h2>
-        <div class="pillars">
+        <div class="pillars" id="teenContent">
             <div class="pillar">
                 <div class="pillar-icon-circle">1</div>
                 <h3>To Be Named</h3>
@@ -111,6 +111,10 @@
         </div>
     </footer>
 
+    <script type="module">
+        import { loadTeamContent } from './load-content.js';
+        loadTeamContent();
+    </script>
     <script>
         const hamburger = document.getElementById('hamburger');
         const navLinks = document.getElementById('navLinks');

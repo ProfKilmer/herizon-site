@@ -34,15 +34,15 @@
     <!-- Page Header -->
     <section class="page-header">
         <h1>Our Mission</h1>
-        <p>At Herizon, we are committed to empowering every young woman to reach her full potential.</p>
+        <p id="missionSubtitle">Empower every young woman to reach her full potential.</p>
     </section>
 
     <!-- Mission Statement Section -->
     <section class="section">
-        <p>
+        <p id="missionP1">
             HERizon exists to help young women understand and navigate their education, careers, and lives. We recognize that while access to opportunity and gender gaps have improved over the past decades, meaningful barriers still persist, ranging from unequal access to mentorship, differences in advancement opportunities and negotiated outcomes, pressures to maintain appearances, tradeoffs between career and family, and both conscious and implicit biases.
         </p>
-        <p style="margin-top: 20px;">
+        <p style="margin-top: 20px;" id="missionP2">
             By providing access to information, resources, networks, and actionable insights, HERizon aspires to make these systems more transparent and provide tools to help navigate these barriers. Our goal is to help young women make informed decisions and approach their present and future with clarity and confidence.
         </p>
     </section>
@@ -88,6 +88,10 @@
         </div>
     </footer>
 
+    <script type="module">
+        import { loadMissionContent } from './load-content.js';
+        loadMissionContent();
+    </script>
     <!-- Mobile Hamburger Toggle Script -->
     <script>
         const hamburger = document.getElementById('hamburger');
@@ -102,10 +106,4 @@
         const navItems = navLinks.querySelectorAll('a');
         navItems.forEach(item => {
             item.addEventListener('click', function() {
-                navLinks.classList.remove('open');
-                hamburger.classList.remove('active');
-            });
-        });
-    </script>
-</body>
-</html>
+                navLinks

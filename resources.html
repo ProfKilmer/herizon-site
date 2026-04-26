@@ -49,7 +49,7 @@
         </div>
 
         <!-- Resource Grid -->
-        <div class="resource-grid">
+        <div class="resource-grid" id="resourceGrid">
             <!-- Book 1 -->
             <div class="resource-card" data-type="book">
                 <span class="resource-type">Book</span>
@@ -131,6 +131,10 @@
         </div>
     </footer>
 
+    <script type="module">
+        import { loadResourcesContent } from './load-content.js';
+        loadResourcesContent();
+    </script>
     <!-- JavaScript -->
     <script>
         // Hamburger menu toggle

@@ -32,7 +32,7 @@
     <!-- Page Header -->
     <div class="page-header">
         <h1>National High School Women's Conference</h1>
-        <p class="subtitle">1st Annual · [Date TBD] · [Location TBD]</p>
+        <p class="subtitle" id="confSubtitle">1st Annual · [Date TBD] · [Location TBD]</p>
     </div>
 
     <!-- Conference Sub-Tab Navigation -->
@@ -95,7 +95,7 @@
                 <h2>Meet Our Speakers</h2>
                 <p>Learn from accomplished women leaders and innovators across various fields.</p>
 
-                <div class="speakers-grid">
+                <div class="speakers-grid" id="speakersGrid">
                     <div class="speaker-card">
                         <div class="speaker-avatar">A</div>
                         <h3>Dr. Amara Osei</h3>
@@ -142,7 +142,7 @@
                 <h2>Conference Schedule</h2>
                 <p>A full day of inspiring sessions, networking, and growth.</p>
 
-                <div class="schedule-timeline">
+                <div class="schedule-timeline" id="scheduleTimeline">
                     <div class="schedule-card">
                         <p class="time">8:00 AM</p>
                         <h3>Registration & Welcome</h3>
@@ -314,6 +314,10 @@
         </div>
     </footer>
 
+    <script type="module">
+        import { loadConferenceContent } from './load-content.js';
+        loadConferenceContent();
+    </script>
     <script>
         // Show conference tab
         function showConfTab(panelId, btn) {
