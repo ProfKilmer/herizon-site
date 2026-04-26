@@ -32,7 +32,7 @@
     <!-- Page Header -->
     <header class="page-header">
         <h1>Discussion Board</h1>
-        <p class="subtitle">Share your experiences and read others' stories.</p>
+        <p class="subtitle" id="discSubtitle">Share your experiences and read others' stories.</p>
     </header>
 
     <!-- Main Content -->
@@ -169,6 +169,10 @@
         </div>
     </footer>
 
+    <script type="module">
+        import { loadDiscussionContent } from './load-content.js';
+        loadDiscussionContent();
+    </script>
     <script>
         // Category labels for display
         const catLabels = {

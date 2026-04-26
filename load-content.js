@@ -37,8 +37,11 @@ export async function loadTeamContent() {
         // Update founder
         const founderSection = document.getElementById('founderContent');
         if (founderSection && founder) {
+            const founderPhoto = founder.photo
+                ? `<img src="${esc(founder.photo)}" style="width:200px;height:240px;border-radius:12px;object-fit:cover;">`
+                : `<div class="team-photo-placeholder"><span>Photo Coming Soon</span></div>`;
             founderSection.innerHTML = `
-                <div class="team-photo-placeholder"><span>Photo Coming Soon</span></div>
+                ${founderPhoto}
                 <div class="team-founder-info">
                     <h2>${esc(founder.name)}</h2>
                     <p class="team-role">Founder</p>
@@ -51,7 +54,7 @@ export async function loadTeamContent() {
         if (advisorGrid && advisors.length > 0) {
             advisorGrid.innerHTML = advisors.map(a => `
                 <div class="pillar">
-                    <div class="pillar-icon-circle">${esc(a.name.charAt(0))}</div>
+                    ${a.photo ? '<img src="' + esc(a.photo) + '" style="width:80px;height:80px;border-radius:50%;object-fit:cover;margin-bottom:12px;">' : '<div class="pillar-icon-circle">' + esc(a.name.charAt(0)) + '</div>'}
                     <h3>${esc(a.name)}</h3>
                     <p class="team-role">Advisor</p>
                     ${a.bio ? '<p>' + esc(a.bio) + '</p>' : ''}
@@ -63,7 +66,7 @@ export async function loadTeamContent() {
         if (teenGrid && teens.length > 0) {
             teenGrid.innerHTML = teens.map(t => `
                 <div class="pillar">
-                    <div class="pillar-icon-circle">${esc(t.name.charAt(0))}</div>
+                    ${t.photo ? '<img src="' + esc(t.photo) + '" style="width:80px;height:80px;border-radius:50%;object-fit:cover;margin-bottom:12px;">' : '<div class="pillar-icon-circle">' + esc(t.name.charAt(0)) + '</div>'}
                     <h3>${esc(t.name)}</h3>
                     <p class="team-role">Teen Board Member</p>
                     ${t.bio ? '<p>' + esc(t.bio) + '</p>' : ''}
@@ -166,4 +169,118 @@ export async function loadMissionContent() {
         const p2 = document.getElementById('missionP2');
         if (p2 && data.paragraph2) p2.textContent = data.paragraph2;
     } catch (e) { console.log('Using static mission content.'); }
+}
+
+// Load about page content
+export async function loadAboutContent() {
+    try {
+        const snap = await getDoc(doc(db, 'settings', 'about'));
+        if (!snap.exists()) return;
+        const data = snap.data();
+
+        const p1 = document.getElementById('aboutP1');
+        if (p1 && data.paragraph1) p1.textContent = data.paragraph1;
+        const p2 = document.getElementById('aboutP2');
+        if (p2 && data.paragraph2) p2.textContent = data.paragraph2;
+        const p3 = document.getElementById('aboutP3');
+        if (p3 && data.paragraph3) p3.textContent = data.paragraph3;
+
+        // Pillars
+        if (data.pillar1Title) {
+            const grid = document.getElementById('aboutPillarsGrid');
+            if (grid) {
+                grid.innerHTML = `
+                    <div class="pillar">
+                        <h3>${esc(data.pillar1Title)}</h3>
+                        <p>${esc(data.pillar1Desc || '')}</p>
+                    </div>
+                    <div class="pillar">
+                        <h3>${esc(data.pillar2Title || '')}</h3>
+                        <p>${esc(data.pillar2Desc || '')}</p>
+                    </div>
+                    <div class="pillar">
+                        <h3>${esc(data.pillar3Title || '')}</h3>
+                        <p>${esc(data.pillar3Desc || '')}</p>
+                    </div>`;
+            }
+        }
+
+        // Looking Ahead
+        const la = document.getElementById('aboutLookingAhead');
+        if (la && data.lookingAhead) la.textContent = data.lookingAhead;
+    } catch (e) { console.log('Using static about content.'); }
+}
+
+// Load discussion posts from Firebase
+export async function loadDiscussionContent() {
+    try {
+        // Subtitle
+        const subSnap = await getDoc(doc(db, 'settings', 'discussions'));
+        if (subSnap.exists() && subSnap.data().subtitle) {
+            const el = document.getElementById('discSubtitle');
+            if (el) el.textContent = subSnap.data().subtitle;
+        }
+
+        // Featured posts
+        const snap = await getDocs(collection(db, 'discposts'));
+        if (snap.empty) return;
+
+        const feed = document.getElementById('discFeed');
+        if (!feed) return;
+
+        const catLabels = { workplace:'Workplace', school:'School', negotiation:'Negotiation', leadership:'Leadership', 'work-life-balance':'Work-Life Balance' };
+
+        // Prepend Firebase posts before any static ones
+        const fragment = document.createDocumentFragment();
+        snap.forEach(d => {
+            const item = d.data();
+            const card = document.createElement('div');
+            card.className = 'disc-card';
+            card.setAttribute('data-cat', item.category);
+            card.innerHTML = `
+                <div class="disc-card-header">
+                    <span class="disc-card-cat">${catLabels[item.category] || item.category}</span>
+                    <span class="disc-card-date">Featured</span>
+                </div>
+                <h4>${esc(item.title)}</h4>
+                <p>${esc(item.body)}</p>
+                <div class="disc-card-footer">
+                    <span class="disc-author">— ${esc(item.author)}</span>
+                    <button class="like-btn" onclick="toggleLike(this)">
+                        <span class="heart">&#9825;</span>
+                        <span class="count">0</span>
+                    </button>
+                </div>`;
+            fragment.appendChild(card);
+        });
+
+        // Replace static content with Firebase posts
+        feed.innerHTML = '';
+        feed.appendChild(fragment);
+    } catch (e) { console.log('Using static discussion content.'); }
+}
+
+// Load connect page content
+export async function loadConnectContent() {
+    try {
+        const snap = await getDoc(doc(db, 'settings', 'connect'));
+        if (!snap.exists()) return;
+        const data = snap.data();
+
+        const emailEl = document.getElementById('connectEmailDisplay');
+        if (emailEl && data.email) emailEl.textContent = data.email;
+
+        const descEl = document.getElementById('connectDescDisplay');
+        if (descEl && data.description) descEl.textContent = data.description;
+
+        // Social links
+        const igEl = document.getElementById('socialIGLink');
+        const liEl = document.getElementById('socialLILink');
+        const ttEl = document.getElementById('socialTTLink');
+        const xEl = document.getElementById('socialXLink');
+        if (igEl) { if (data.instagram) { igEl.href = data.instagram; igEl.style.display = ''; } else { igEl.style.display = 'none'; } }
+        if (liEl) { if (data.linkedin) { liEl.href = data.linkedin; liEl.style.display = ''; } else { liEl.style.display = 'none'; } }
+        if (ttEl) { if (data.tiktok) { ttEl.href = data.tiktok; ttEl.style.display = ''; } else { ttEl.style.display = 'none'; } }
+        if (xEl) { if (data.twitter) { xEl.href = data.twitter; xEl.style.display = ''; } else { xEl.style.display = 'none'; } }
+    } catch (e) { console.log('Using static connect content.'); }
 }

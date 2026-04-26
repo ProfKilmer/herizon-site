@@ -40,13 +40,13 @@
     <!-- Origin Story Section -->
     <section class="section">
         <h2>Our Story</h2>
-        <p style="max-width: 800px; margin: 24px 0; font-size: 1.05rem; line-height: 1.8; color: #555;">
+        <p id="aboutP1" style="max-width: 800px; margin: 24px 0; font-size: 1.05rem; line-height: 1.8; color: #555;">
             Herizon was founded in 2026 with a simple but powerful belief: young women deserve spaces where they can learn from one another, share their authentic experiences, and rise together. We recognized that navigating the world as a young woman comes with unique challenges—barriers that aren't always visible, biases both internal and external, and difficult tradeoffs that can feel isolating. Too often, young women face these journeys alone.
         </p>
-        <p style="max-width: 800px; margin: 24px 0; font-size: 1.05rem; line-height: 1.8; color: #555;">
+        <p id="aboutP2" style="max-width: 800px; margin: 24px 0; font-size: 1.05rem; line-height: 1.8; color: #555;">
             Herizon was created to change that. We exist to build a movement that disrupts isolation and creates connection. By bringing together brilliant young women from diverse backgrounds, fields, and life stages, we create a platform where challenges become conversations, experiences become wisdom, and individual journeys become collective power. Our mission is to ensure that every young woman has access to the knowledge, mentorship, and community she needs to not just survive in her field—but to thrive and lead on her own terms.
         </p>
-        <p style="max-width: 800px; margin: 24px 0; font-size: 1.05rem; line-height: 1.8; color: #555;">
+        <p id="aboutP3" style="max-width: 800px; margin: 24px 0; font-size: 1.05rem; line-height: 1.8; color: #555;">
             From our conference to our online community, from curated resources to open discussions, every aspect of Herizon is designed with one goal in mind: to expand her horizon and empower her to reach her full potential.
         </p>
     </section>
@@ -54,7 +54,7 @@
     <!-- Pillars Section -->
     <section class="section">
         <h2>Our Pillars</h2>
-        <div class="pillars">
+        <div class="pillars" id="aboutPillarsGrid">
             <div class="pillar">
                 <div class="pillar-icon">🤝</div>
                 <h3>Community</h3>
@@ -76,7 +76,7 @@
     <!-- Looking Ahead Section -->
     <section class="section section-dark">
         <h2>Looking Ahead</h2>
-        <p class="lead" style="max-width: 750px; margin: 24px auto 0;">
+        <p class="lead" id="aboutLookingAhead" style="max-width: 750px; margin: 24px auto 0;">
             The Herizon community is growing, and so are our ambitions. Over the coming years, we're committed to expanding our annual conference to reach more cities and more young women. We're building a robust online community platform where conversations continue year-round, where resources are always accessible, and where support is just a click away. We're also partnering with schools and educational institutions to introduce Herizon's mission and content to the next generation of young women, ensuring that support for her growth starts early. Every step forward is about deepening the movement and making sure no young woman navigates her journey alone.
         </p>
     </section>
@@ -89,6 +89,10 @@
         </div>
     </footer>
 
+    <script type="module">
+        import { loadAboutContent } from './load-content.js';
+        loadAboutContent();
+    </script>
     <!-- Mobile Hamburger Toggle Script -->
     <script>
         const hamburger = document.getElementById('hamburger');

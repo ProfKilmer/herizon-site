@@ -64,14 +64,15 @@
             <!-- Right Column: Contact Info & Social Links -->
             <div class="connect-info">
                 <h3>Other Ways to Reach Us</h3>
-                <p style="color: rgba(255,255,255,0.85); font-size: 0.95rem; line-height: 1.7; margin-bottom: 20px;">
-                    Have questions about Herizon? Want to speak at our conference or explore partnership opportunities? We'd love to hear from you. Reach out at <strong>hello@herizon.org</strong> and let's connect.
+                <p id="connectDescDisplay" style="color: rgba(255,255,255,0.85); font-size: 0.95rem; line-height: 1.7; margin-bottom: 20px;">
+                    Have questions about Herizon? Want to speak at our conference or explore partnership opportunities? We'd love to hear from you.
                 </p>
+                <p style="color: rgba(255,255,255,0.85); margin-bottom: 20px;"><strong id="connectEmailDisplay">hello@herizon.org</strong></p>
                 <div class="social-links">
-                    <a href="#" class="social-link" title="Instagram">IG</a>
-                    <a href="#" class="social-link" title="LinkedIn">in</a>
-                    <a href="#" class="social-link" title="TikTok">TT</a>
-                    <a href="#" class="social-link" title="X">X</a>
+                    <a href="#" class="social-link" id="socialIGLink" title="Instagram">IG</a>
+                    <a href="#" class="social-link" id="socialLILink" title="LinkedIn">in</a>
+                    <a href="#" class="social-link" id="socialTTLink" title="TikTok">TT</a>
+                    <a href="#" class="social-link" id="socialXLink" title="X">X</a>
                 </div>
             </div>
         </div>
@@ -85,6 +86,10 @@
         </div>
     </footer>
 
+    <script type="module">
+        import { loadConnectContent } from './load-content.js';
+        loadConnectContent();
+    </script>
     <!-- Scripts -->
     <script>
         // Handle Subscribe Form

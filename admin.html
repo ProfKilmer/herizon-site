@@ -172,6 +172,9 @@
             <div class="sidebar-item" onclick="showSection('resources', this)">Resources</div>
             <div class="sidebar-item" onclick="showSection('conference', this)">Conference</div>
             <div class="sidebar-item" onclick="showSection('mission', this)">Mission</div>
+            <div class="sidebar-item" onclick="showSection('about', this)">About</div>
+            <div class="sidebar-item" onclick="showSection('discussions', this)">Discussions</div>
+            <div class="sidebar-item" onclick="showSection('connect', this)">Connect</div>
         </div>
 
         <!-- Content -->
@@ -198,6 +201,11 @@
                                 <option value="Advisor">Advisor</option>
                                 <option value="Teen Board Member">Teen Board Member</option>
                             </select>
+                        </div>
+                        <div class="form-row">
+                            <label>Photo URL</label>
+                            <input type="url" id="teamPhoto" placeholder="https://... (paste a link to their photo)">
+                            <span style="font-size:0.8rem;color:#888;">Tip: Upload photo to Google Drive or Imgur, then paste the direct image link here.</span>
                         </div>
                         <div class="form-row">
                             <label>Bio</label>
@@ -344,6 +352,157 @@
                 </div>
             </div>
 
+            <!-- ABOUT Section -->
+            <div id="section-about" class="admin-section">
+                <h2>About Page</h2>
+                <p class="section-desc">Edit the About page content — origin story, values, and future plans.</p>
+                <div class="admin-form">
+                    <h3>Origin Story</h3>
+                    <div class="form-row">
+                        <label>Paragraph 1</label>
+                        <textarea id="aboutP1" style="min-height:100px;"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <label>Paragraph 2</label>
+                        <textarea id="aboutP2" style="min-height:100px;"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <label>Paragraph 3</label>
+                        <textarea id="aboutP3" style="min-height:100px;"></textarea>
+                    </div>
+                    <button class="btn-save" onclick="saveAbout()">Save Origin Story</button>
+                </div>
+
+                <div class="admin-form" style="margin-top:24px;">
+                    <h3>Value Pillars</h3>
+                    <p style="color:#888;font-size:0.85rem;margin-bottom:16px;">The three value cards shown on the About page.</p>
+                    <div class="form-row">
+                        <label>Pillar 1 — Title</label>
+                        <input type="text" id="aboutPillar1Title" placeholder="e.g. Community">
+                    </div>
+                    <div class="form-row">
+                        <label>Pillar 1 — Description</label>
+                        <textarea id="aboutPillar1Desc"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <label>Pillar 2 — Title</label>
+                        <input type="text" id="aboutPillar2Title" placeholder="e.g. Knowledge">
+                    </div>
+                    <div class="form-row">
+                        <label>Pillar 2 — Description</label>
+                        <textarea id="aboutPillar2Desc"></textarea>
+                    </div>
+                    <div class="form-row">
+                        <label>Pillar 3 — Title</label>
+                        <input type="text" id="aboutPillar3Title" placeholder="e.g. Action">
+                    </div>
+                    <div class="form-row">
+                        <label>Pillar 3 — Description</label>
+                        <textarea id="aboutPillar3Desc"></textarea>
+                    </div>
+                    <button class="btn-save" onclick="saveAboutPillars()">Save Pillars</button>
+                </div>
+
+                <div class="admin-form" style="margin-top:24px;">
+                    <h3>Looking Ahead</h3>
+                    <div class="form-row">
+                        <label>Future plans text</label>
+                        <textarea id="aboutLookingAhead" style="min-height:120px;"></textarea>
+                    </div>
+                    <button class="btn-save" onclick="saveAboutLookingAhead()">Save Looking Ahead</button>
+                </div>
+            </div>
+
+            <!-- DISCUSSIONS Section -->
+            <div id="section-discussions" class="admin-section">
+                <h2>Discussions</h2>
+                <p class="section-desc">Manage discussion categories and moderate featured posts.</p>
+
+                <div class="admin-form">
+                    <h3>Page Subtitle</h3>
+                    <div class="form-row">
+                        <label>Subtitle shown under "Discussion Board"</label>
+                        <input type="text" id="discSubtitle" placeholder="e.g. Share your experiences and read others' stories.">
+                    </div>
+                    <button class="btn-save" onclick="saveDiscSubtitle()">Save Subtitle</button>
+                </div>
+
+                <h3 style="margin: 28px 0 16px; font-family: 'Playfair Display', serif; color: var(--navy);">Featured Posts</h3>
+                <p style="color:#888;font-size:0.85rem;margin-bottom:16px;">These seed posts appear on the Discussions page for all visitors.</p>
+                <button class="btn-add" onclick="showAddForm('discposts')">+ Add Featured Post</button>
+                <div id="discpostsForm" style="display:none;">
+                    <div class="admin-form">
+                        <h3 id="discpostsFormTitle">Add Featured Post</h3>
+                        <input type="hidden" id="discpostEditId">
+                        <div class="form-row">
+                            <label>Author Name</label>
+                            <input type="text" id="discpostAuthor" placeholder="e.g. Maya">
+                        </div>
+                        <div class="form-row">
+                            <label>Category</label>
+                            <select id="discpostCategory">
+                                <option value="workplace">Workplace</option>
+                                <option value="school">School</option>
+                                <option value="negotiation">Negotiation</option>
+                                <option value="leadership">Leadership</option>
+                                <option value="work-life-balance">Work-Life Balance</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <label>Title</label>
+                            <input type="text" id="discpostTitle" placeholder="Post title">
+                        </div>
+                        <div class="form-row">
+                            <label>Body</label>
+                            <textarea id="discpostBody" placeholder="Post content..."></textarea>
+                        </div>
+                        <button class="btn-save" onclick="saveDiscPost()">Save</button>
+                        <button class="btn-cancel" onclick="hideForm('discposts')">Cancel</button>
+                    </div>
+                </div>
+                <div id="discpostsList"></div>
+            </div>
+
+            <!-- CONNECT Section -->
+            <div id="section-connect" class="admin-section">
+                <h2>Connect Page</h2>
+                <p class="section-desc">Edit contact information and social media links.</p>
+                <div class="admin-form">
+                    <h3>Contact Information</h3>
+                    <div class="form-row">
+                        <label>Contact Email</label>
+                        <input type="email" id="connectEmail" placeholder="e.g. hello@herizon.org">
+                    </div>
+                    <div class="form-row">
+                        <label>Contact Description</label>
+                        <textarea id="connectDesc" placeholder="Text shown next to contact info..."></textarea>
+                    </div>
+                    <button class="btn-save" onclick="saveConnectInfo()">Save Contact Info</button>
+                </div>
+
+                <div class="admin-form" style="margin-top:24px;">
+                    <h3>Social Media Links</h3>
+                    <p style="color:#888;font-size:0.85rem;margin-bottom:16px;">Leave blank to hide a social link.</p>
+                    <div class="form-row">
+                        <label>Instagram URL</label>
+                        <input type="url" id="socialIG" placeholder="https://instagram.com/...">
+                    </div>
+                    <div class="form-row">
+                        <label>LinkedIn URL</label>
+                        <input type="url" id="socialLI" placeholder="https://linkedin.com/...">
+                    </div>
+                    <div class="form-row">
+                        <label>TikTok URL</label>
+                        <input type="url" id="socialTT" placeholder="https://tiktok.com/...">
+                    </div>
+                    <div class="form-row">
+                        <label>X (Twitter) URL</label>
+                        <input type="url" id="socialX" placeholder="https://x.com/...">
+                    </div>
+                    <button class="btn-save" onclick="saveSocialLinks()">Save Social Links</button>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -389,6 +548,9 @@
         await loadSchedule();
         await loadConferenceInfo();
         await loadMission();
+        await loadAbout();
+        await loadDiscussions();
+        await loadConnect();
     }
     window.loadAllData = loadAllData;
 
@@ -402,13 +564,14 @@
         snap.forEach(d => items.push({ id: d.id, ...d.data() }));
         items.sort((a, b) => (roleOrder[a.role] || 99) - (roleOrder[b.role] || 99));
         items.forEach(item => {
+            const photoThumb = item.photo ? `<img src="${esc(item.photo)}" style="width:50px;height:50px;border-radius:50%;object-fit:cover;margin-right:12px;vertical-align:middle;">` : '';
             list.innerHTML += `
                 <div class="admin-card">
                     <div class="card-actions">
-                        <button class="btn-edit" onclick="editTeamMember('${item.id}', '${esc(item.name)}', '${esc(item.role)}', '${esc(item.bio || '')}')">Edit</button>
+                        <button class="btn-edit" onclick="editTeamMember('${item.id}', '${esc(item.name)}', '${esc(item.role)}', '${esc(item.photo || '')}', '${esc(item.bio || '')}')">Edit</button>
                         <button class="btn-delete" onclick="deleteItem('team', '${item.id}')">Delete</button>
                     </div>
-                    <h4>${esc(item.name)}</h4>
+                    <h4>${photoThumb}${esc(item.name)}</h4>
                     <div class="card-subtitle">${esc(item.role)}</div>
                     <p>${esc(item.bio || 'No bio yet.')}</p>
                 </div>`;
@@ -509,6 +672,70 @@
     }
     window.loadMission = loadMission;
 
+    // ── ABOUT ──
+    async function loadAbout() {
+        const snap = await getDoc(doc(db, 'settings', 'about'));
+        if (snap.exists()) {
+            const data = snap.data();
+            document.getElementById('aboutP1').value = data.paragraph1 || '';
+            document.getElementById('aboutP2').value = data.paragraph2 || '';
+            document.getElementById('aboutP3').value = data.paragraph3 || '';
+            document.getElementById('aboutPillar1Title').value = data.pillar1Title || '';
+            document.getElementById('aboutPillar1Desc').value = data.pillar1Desc || '';
+            document.getElementById('aboutPillar2Title').value = data.pillar2Title || '';
+            document.getElementById('aboutPillar2Desc').value = data.pillar2Desc || '';
+            document.getElementById('aboutPillar3Title').value = data.pillar3Title || '';
+            document.getElementById('aboutPillar3Desc').value = data.pillar3Desc || '';
+            document.getElementById('aboutLookingAhead').value = data.lookingAhead || '';
+        }
+    }
+    window.loadAbout = loadAbout;
+
+    // ── DISCUSSIONS ──
+    async function loadDiscussions() {
+        // Subtitle
+        const subSnap = await getDoc(doc(db, 'settings', 'discussions'));
+        if (subSnap.exists()) {
+            document.getElementById('discSubtitle').value = subSnap.data().subtitle || '';
+        }
+        // Featured posts
+        const snap = await getDocs(collection(db, 'discposts'));
+        const list = document.getElementById('discpostsList');
+        list.innerHTML = '';
+        const catLabels = { workplace:'Workplace', school:'School', negotiation:'Negotiation', leadership:'Leadership', 'work-life-balance':'Work-Life Balance' };
+        snap.forEach(d => {
+            const item = d.data();
+            list.innerHTML += `
+                <div class="admin-card">
+                    <div class="card-actions">
+                        <button class="btn-edit" onclick="editDiscPost('${d.id}', '${esc(item.author)}', '${esc(item.category)}', '${esc(item.title)}', '${esc(item.body)}')">Edit</button>
+                        <button class="btn-delete" onclick="deleteItem('discposts', '${d.id}')">Delete</button>
+                    </div>
+                    <h4>${esc(item.title)}</h4>
+                    <div class="card-subtitle">${catLabels[item.category] || item.category}</div>
+                    <p>${esc(item.body)}</p>
+                    <p style="margin-top:8px;color:#888;font-size:0.85rem;">— ${esc(item.author)}</p>
+                </div>`;
+        });
+        if (list.innerHTML === '') list.innerHTML = '<p style="color:#888;">No featured posts yet.</p>';
+    }
+    window.loadDiscussions = loadDiscussions;
+
+    // ── CONNECT ──
+    async function loadConnect() {
+        const snap = await getDoc(doc(db, 'settings', 'connect'));
+        if (snap.exists()) {
+            const data = snap.data();
+            document.getElementById('connectEmail').value = data.email || '';
+            document.getElementById('connectDesc').value = data.description || '';
+            document.getElementById('socialIG').value = data.instagram || '';
+            document.getElementById('socialLI').value = data.linkedin || '';
+            document.getElementById('socialTT').value = data.tiktok || '';
+            document.getElementById('socialX').value = data.twitter || '';
+        }
+    }
+    window.loadConnect = loadConnect;
+
     // Escape HTML helper
     function esc(str) {
         if (!str) return '';
@@ -563,6 +790,7 @@
             document.getElementById('teamEditId').value = '';
             document.getElementById('teamName').value = '';
             document.getElementById('teamRole').value = 'Advisor';
+            document.getElementById('teamPhoto').value = '';
             document.getElementById('teamBio').value = '';
             document.getElementById('teamFormTitle').textContent = 'Add Team Member';
         } else if (type === 'resources') {
@@ -585,6 +813,13 @@
             document.getElementById('scheduleTitle').value = '';
             document.getElementById('scheduleDesc').value = '';
             document.getElementById('scheduleFormTitle').textContent = 'Add Schedule Item';
+        } else if (type === 'discposts') {
+            document.getElementById('discpostEditId').value = '';
+            document.getElementById('discpostAuthor').value = '';
+            document.getElementById('discpostCategory').value = 'workplace';
+            document.getElementById('discpostTitle').value = '';
+            document.getElementById('discpostBody').value = '';
+            document.getElementById('discpostsFormTitle').textContent = 'Add Featured Post';
         }
     }
 
@@ -601,6 +836,7 @@
         const data = {
             name: document.getElementById('teamName').value,
             role: document.getElementById('teamRole').value,
+            photo: document.getElementById('teamPhoto').value,
             bio: document.getElementById('teamBio').value
         };
         if (!data.name) { showStatus('Name is required.', 'error'); return; }
@@ -707,13 +943,124 @@
     }
     window.saveMission = saveMission;
 
+    // ── ABOUT SAVES ──
+    async function saveAbout() {
+        const existing = await window._getDoc(window._doc(window._db, 'settings', 'about'));
+        const prev = existing.exists() ? existing.data() : {};
+        const data = { ...prev,
+            paragraph1: document.getElementById('aboutP1').value,
+            paragraph2: document.getElementById('aboutP2').value,
+            paragraph3: document.getElementById('aboutP3').value
+        };
+        try {
+            await window._setDoc(window._doc(window._db, 'settings', 'about'), data);
+            showStatus('Origin story saved!', 'success');
+        } catch (e) { showStatus('Error: ' + e.message, 'error'); }
+    }
+    window.saveAbout = saveAbout;
+
+    async function saveAboutPillars() {
+        const existing = await window._getDoc(window._doc(window._db, 'settings', 'about'));
+        const prev = existing.exists() ? existing.data() : {};
+        const data = { ...prev,
+            pillar1Title: document.getElementById('aboutPillar1Title').value,
+            pillar1Desc: document.getElementById('aboutPillar1Desc').value,
+            pillar2Title: document.getElementById('aboutPillar2Title').value,
+            pillar2Desc: document.getElementById('aboutPillar2Desc').value,
+            pillar3Title: document.getElementById('aboutPillar3Title').value,
+            pillar3Desc: document.getElementById('aboutPillar3Desc').value
+        };
+        try {
+            await window._setDoc(window._doc(window._db, 'settings', 'about'), data);
+            showStatus('Pillars saved!', 'success');
+        } catch (e) { showStatus('Error: ' + e.message, 'error'); }
+    }
+    window.saveAboutPillars = saveAboutPillars;
+
+    async function saveAboutLookingAhead() {
+        const existing = await window._getDoc(window._doc(window._db, 'settings', 'about'));
+        const prev = existing.exists() ? existing.data() : {};
+        const data = { ...prev,
+            lookingAhead: document.getElementById('aboutLookingAhead').value
+        };
+        try {
+            await window._setDoc(window._doc(window._db, 'settings', 'about'), data);
+            showStatus('Looking Ahead saved!', 'success');
+        } catch (e) { showStatus('Error: ' + e.message, 'error'); }
+    }
+    window.saveAboutLookingAhead = saveAboutLookingAhead;
+
+    // ── DISCUSSIONS SAVES ──
+    async function saveDiscSubtitle() {
+        const data = { subtitle: document.getElementById('discSubtitle').value };
+        try {
+            await window._setDoc(window._doc(window._db, 'settings', 'discussions'), data);
+            showStatus('Subtitle saved!', 'success');
+        } catch (e) { showStatus('Error: ' + e.message, 'error'); }
+    }
+    window.saveDiscSubtitle = saveDiscSubtitle;
+
+    async function saveDiscPost() {
+        const editId = document.getElementById('discpostEditId').value;
+        const data = {
+            author: document.getElementById('discpostAuthor').value,
+            category: document.getElementById('discpostCategory').value,
+            title: document.getElementById('discpostTitle').value,
+            body: document.getElementById('discpostBody').value
+        };
+        if (!data.title || !data.body) { showStatus('Title and body are required.', 'error'); return; }
+        try {
+            if (editId) {
+                await window._updateDoc(window._doc(window._db, 'discposts', editId), data);
+            } else {
+                await window._addDoc(window._collection(window._db, 'discposts'), data);
+            }
+            hideForm('discposts');
+            showStatus('Post saved!', 'success');
+            await window.loadDiscussions();
+        } catch (e) { showStatus('Error: ' + e.message, 'error'); }
+    }
+    window.saveDiscPost = saveDiscPost;
+
+    // ── CONNECT SAVES ──
+    async function saveConnectInfo() {
+        const existing = await window._getDoc(window._doc(window._db, 'settings', 'connect'));
+        const prev = existing.exists() ? existing.data() : {};
+        const data = { ...prev,
+            email: document.getElementById('connectEmail').value,
+            description: document.getElementById('connectDesc').value
+        };
+        try {
+            await window._setDoc(window._doc(window._db, 'settings', 'connect'), data);
+            showStatus('Contact info saved!', 'success');
+        } catch (e) { showStatus('Error: ' + e.message, 'error'); }
+    }
+    window.saveConnectInfo = saveConnectInfo;
+
+    async function saveSocialLinks() {
+        const existing = await window._getDoc(window._doc(window._db, 'settings', 'connect'));
+        const prev = existing.exists() ? existing.data() : {};
+        const data = { ...prev,
+            instagram: document.getElementById('socialIG').value,
+            linkedin: document.getElementById('socialLI').value,
+            tiktok: document.getElementById('socialTT').value,
+            twitter: document.getElementById('socialX').value
+        };
+        try {
+            await window._setDoc(window._doc(window._db, 'settings', 'connect'), data);
+            showStatus('Social links saved!', 'success');
+        } catch (e) { showStatus('Error: ' + e.message, 'error'); }
+    }
+    window.saveSocialLinks = saveSocialLinks;
+
     // ── EDIT FUNCTIONS ──
-    function editTeamMember(id, name, role, bio) {
+    function editTeamMember(id, name, role, photo, bio) {
         document.getElementById('teamForm').style.display = 'block';
         document.getElementById('teamFormTitle').textContent = 'Edit Team Member';
         document.getElementById('teamEditId').value = id;
         document.getElementById('teamName').value = name;
         document.getElementById('teamRole').value = role;
+        document.getElementById('teamPhoto').value = photo;
         document.getElementById('teamBio').value = bio;
     }
     window.editTeamMember = editTeamMember;
@@ -750,6 +1097,17 @@
     }
     window.editScheduleItem = editScheduleItem;
 
+    function editDiscPost(id, author, category, title, body) {
+        document.getElementById('discpostsForm').style.display = 'block';
+        document.getElementById('discpostsFormTitle').textContent = 'Edit Featured Post';
+        document.getElementById('discpostEditId').value = id;
+        document.getElementById('discpostAuthor').value = author;
+        document.getElementById('discpostCategory').value = category;
+        document.getElementById('discpostTitle').value = title;
+        document.getElementById('discpostBody').value = body;
+    }
+    window.editDiscPost = editDiscPost;
+
     // ── DELETE ──
     async function deleteItem(collectionName, id) {
         if (!confirm('Are you sure you want to delete this item?')) return;
@@ -760,6 +1118,7 @@
             else if (collectionName === 'resources') await window.loadResources();
             else if (collectionName === 'speakers') await window.loadSpeakers();
             else if (collectionName === 'schedule') await window.loadSchedule();
+            else if (collectionName === 'discposts') await window.loadDiscussions();
         } catch (e) { showStatus('Error: ' + e.message, 'error'); }
     }
     window.deleteItem = deleteItem;
