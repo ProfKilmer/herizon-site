@@ -84,18 +84,20 @@ export async function loadResourcesContent() {
         const grid = document.getElementById('resourceGrid');
         if (!grid) return;
 
+        // Append Firebase resources AFTER existing static content (don't replace)
         const typeLabels = { book: 'Book', article: 'Article', research: 'Research', advocacy: 'Advocacy' };
-        grid.innerHTML = '';
         snap.forEach(d => {
             const item = d.data();
-            grid.innerHTML += `
-                <div class="resource-card" data-type="${esc(item.type)}">
+            const card = document.createElement('div');
+            card.className = 'resource-card';
+            card.setAttribute('data-type', item.type);
+            card.innerHTML = `
                     <span class="resource-type">${typeLabels[item.type] || item.type}</span>
                     <h4>${esc(item.title)}</h4>
                     <span class="resource-author">by ${esc(item.author)}</span>
                     <p>${esc(item.description)}</p>
-                    ${item.link ? '<p style="margin-top:8px;"><a href="' + esc(item.link) + '" target="_blank" style="color:#c9a84c;">Learn More &rarr;</a></p>' : ''}
-                </div>`;
+                    ${item.link ? '<p style="margin-top:8px;"><a href="' + esc(item.link) + '" target="_blank" style="color:#c9a84c;">Learn More &rarr;</a></p>' : ''}`;
+            grid.appendChild(card);
         });
     } catch (e) { console.log('Using static resource content.'); }
 }
