@@ -203,9 +203,10 @@
                             </select>
                         </div>
                         <div class="form-row">
-                            <label>Photo URL</label>
-                            <input type="url" id="teamPhoto" placeholder="https://... (paste a link to their photo)">
-                            <span style="font-size:0.8rem;color:#888;">Tip: Upload photo to Google Drive or Imgur, then paste the direct image link here.</span>
+                            <label>Photo</label>
+                            <input type="file" id="teamPhotoFile" accept="image/*" style="padding:8px;">
+                            <div id="teamPhotoPreview" style="margin-top:8px;"></div>
+                            <input type="hidden" id="teamPhoto">
                         </div>
                         <div class="form-row">
                             <label>Bio</label>
@@ -508,13 +509,19 @@
 </div>
 
 <script type="module">
-    import { auth, db, signInWithEmailAndPassword, signOut, onAuthStateChanged,
-             collection, doc, getDoc, getDocs, setDoc, addDoc, deleteDoc, updateDoc, query, orderBy
+    import { auth, db, storage, signInWithEmailAndPassword, signOut, onAuthStateChanged,
+             collection, doc, getDoc, getDocs, setDoc, addDoc, deleteDoc, updateDoc, query, orderBy,
+             ref, uploadBytes, getDownloadURL, deleteObject
     } from './firebase-config.js';
 
     // Make functions available globally
     window._auth = auth;
     window._db = db;
+    window._storage = storage;
+    window._ref = ref;
+    window._uploadBytes = uploadBytes;
+    window._getDownloadURL = getDownloadURL;
+    window._deleteObject = deleteObject;
     window._signInWithEmailAndPassword = signInWithEmailAndPassword;
     window._signOut = signOut;
     window._collection = collection;
@@ -791,6 +798,8 @@
             document.getElementById('teamName').value = '';
             document.getElementById('teamRole').value = 'Advisor';
             document.getElementById('teamPhoto').value = '';
+            document.getElementById('teamPhotoFile').value = '';
+            document.getElementById('teamPhotoPreview').innerHTML = '';
             document.getElementById('teamBio').value = '';
             document.getElementById('teamFormTitle').textContent = 'Add Team Member';
         } else if (type === 'resources') {
@@ -833,10 +842,29 @@
     // ── SAVE FUNCTIONS ──
     async function saveTeamMember() {
         const editId = document.getElementById('teamEditId').value;
+        const fileInput = document.getElementById('teamPhotoFile');
+        const existingPhoto = document.getElementById('teamPhoto').value;
+        let photoURL = existingPhoto;
+
+        // Upload photo if a new file was selected
+        if (fileInput.files && fileInput.files[0]) {
+            showStatus('Uploading photo...', 'success');
+            try {
+                const file = fileInput.files[0];
+                const fileName = Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._-]/g, '');
+                const storageRef = window._ref(window._storage, 'team-photos/' + fileName);
+                await window._uploadBytes(storageRef, file);
+                photoURL = await window._getDownloadURL(storageRef);
+            } catch (e) {
+                showStatus('Photo upload failed: ' + e.message, 'error');
+                return;
+            }
+        }
+
         const data = {
             name: document.getElementById('teamName').value,
             role: document.getElementById('teamRole').value,
-            photo: document.getElementById('teamPhoto').value,
+            photo: photoURL,
             bio: document.getElementById('teamBio').value
         };
         if (!data.name) { showStatus('Name is required.', 'error'); return; }
@@ -1061,6 +1089,10 @@
         document.getElementById('teamName').value = name;
         document.getElementById('teamRole').value = role;
         document.getElementById('teamPhoto').value = photo;
+        document.getElementById('teamPhotoFile').value = '';
+        document.getElementById('teamPhotoPreview').innerHTML = photo
+            ? '<img src="' + photo + '" style="width:80px;height:80px;border-radius:8px;object-fit:cover;"><span style="font-size:0.8rem;color:#888;margin-left:8px;">Current photo. Choose a new file to replace.</span>'
+            : '';
         document.getElementById('teamBio').value = bio;
     }
     window.editTeamMember = editTeamMember;
