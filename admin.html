@@ -223,6 +223,10 @@
             <div id="section-resources" class="admin-section">
                 <h2>Resources</h2>
                 <p class="section-desc">Manage books, articles, research, and advocacy resources.</p>
+                <div id="seedBtnContainer" style="margin-bottom:16px;">
+                    <button class="btn-add" style="background:var(--warm-gold);color:var(--navy);" onclick="seedStaticResources()">Import Static Resources (Books &amp; Advocacy)</button>
+                    <span style="font-size:0.85rem;color:#888;margin-left:8px;">One-time import — adds the 7 books and 3 advocacy items to Firebase</span>
+                </div>
                 <button class="btn-add" onclick="showAddForm('resources')">+ Add Resource</button>
                 <div id="resourcesForm" style="display:none;">
                     <div class="admin-form">
@@ -252,6 +256,10 @@
                         <div class="form-row">
                             <label>Link (optional)</label>
                             <input type="url" id="resourceLink" placeholder="https://...">
+                        </div>
+                        <div class="form-row">
+                            <label>Cover Image URL (optional — for books)</label>
+                            <input type="url" id="resourceCover" placeholder="https://covers.openlibrary.org/b/isbn/...">
                         </div>
                         <button class="btn-save" onclick="saveResource()">Save</button>
                         <button class="btn-cancel" onclick="hideForm('resources')">Cancel</button>
@@ -817,6 +825,7 @@
             document.getElementById('resourceAuthor').value = '';
             document.getElementById('resourceDesc').value = '';
             document.getElementById('resourceLink').value = '';
+            document.getElementById('resourceCover').value = '';
             document.getElementById('resourcesFormTitle').textContent = 'Add Resource';
         } else if (type === 'speakers') {
             document.getElementById('speakerEditId').value = '';
@@ -896,7 +905,8 @@
             type: document.getElementById('resourceType').value,
             author: document.getElementById('resourceAuthor').value,
             description: document.getElementById('resourceDesc').value,
-            link: document.getElementById('resourceLink').value
+            link: document.getElementById('resourceLink').value,
+            cover: document.getElementById('resourceCover').value
         };
         if (!data.title) { showStatus('Title is required.', 'error'); return; }
         try {
@@ -911,6 +921,34 @@
         } catch (e) { showStatus('Error: ' + e.message, 'error'); }
     }
     window.saveResource = saveResource;
+
+    // One-time seed: import static books & advocacy into Firebase
+    async function seedStaticResources() {
+        if (!confirm('This will add 7 books and 3 advocacy items to Firebase. Continue?')) return;
+        const items = [
+            { type:'book', title:'Lean In', author:'Sheryl Sandberg', description:'A powerful exploration of women, work, and the will to lead, offering practical advice on how women can overcome barriers to reach their full potential in the workplace and beyond.', link:'https://www.goodreads.com/book/show/16071764-lean-in', cover:'https://covers.openlibrary.org/b/isbn/0385349947-M.jpg' },
+            { type:'book', title:'Becoming', author:'Michelle Obama', description:'An intimate and inspiring memoir tracing Michelle Obama\'s journey from the South Side of Chicago to the White House, exploring the experiences that shaped her and the importance of finding your own voice.', link:'https://www.goodreads.com/book/show/38746485-becoming', cover:'https://covers.openlibrary.org/b/isbn/1524763136-M.jpg' },
+            { type:'book', title:'Invisible Women: Exposing Data Bias in a World Designed for Men', author:'Caroline Criado Perez', description:'A groundbreaking investigation into how the gender data gap affects women\'s lives, from workplace design to medical research, revealing the hidden biases embedded in systems built without women in mind.', link:'https://www.goodreads.com/book/show/41104077-invisible-women', cover:'https://covers.openlibrary.org/b/isbn/1419729071-M.jpg' },
+            { type:'book', title:'Career and Family', author:'Claudia Goldin', description:'From the Nobel Prize-winning economist, a landmark study tracing how generations of women have navigated the tension between career ambitions and family life, and why true equity remains elusive.', link:'https://www.goodreads.com/en/book/show/57570032-career-and-family', cover:'https://covers.openlibrary.org/b/isbn/0691228663-M.jpg' },
+            { type:'book', title:'Women Don\'t Ask', author:'Linda Babcock & Sara Laschever', description:'A pioneering look at why women often don\'t negotiate for themselves and how this reluctance contributes to the gender gap in pay, advancement, and opportunities.', link:'https://www.goodreads.com/book/show/192313.Women_Don_t_Ask', cover:'https://covers.openlibrary.org/b/isbn/0553383876-M.jpg' },
+            { type:'book', title:'Men and Women of the Corporation', author:'Rosabeth Moss Kanter', description:'A classic study of how corporate structures shape careers and self-images, revealing how the distribution of power and opportunity within organizations affects women\'s advancement.', link:'https://www.goodreads.com/book/show/108588.Men_and_Women_of_the_Corporation', cover:'https://covers.openlibrary.org/b/isbn/0465044549-M.jpg' },
+            { type:'book', title:'The Confidence Code', author:'Katty Kay & Claire Shipman', description:'An exploration of the science and art of self-assurance, revealing what confidence really is, why women often lack it, and how they can develop it to succeed in every aspect of life.', link:'https://www.goodreads.com/book/show/18052969-the-confidence-code', cover:'https://covers.openlibrary.org/b/isbn/006223062X-M.jpg' },
+            { type:'advocacy', title:'Title IX Protections and Proposed Changes', author:'Federal Policy', description:'Stay informed about proposed changes to Title IX regulations that affect gender equity in education, athletics, and campus safety. Learn how to make your voice heard during public comment periods.', link:'', cover:'' },
+            { type:'advocacy', title:'Equal Pay Legislation Tracker', author:'State & Federal', description:'Track pending equal pay bills at the state and federal level. Understand what each proposal would change and how to contact your representatives to advocate for pay transparency and equity.', link:'', cover:'' },
+            { type:'advocacy', title:'Women in STEM Funding Initiatives', author:'Federal & Private', description:'Explore current and proposed funding programs designed to increase women\'s participation in STEM fields, including scholarships, grants, and mentorship programs you can support or apply to.', link:'', cover:'' }
+        ];
+        try {
+            let count = 0;
+            for (const item of items) {
+                await window._addDoc(window._collection(window._db, 'resources'), item);
+                count++;
+            }
+            showStatus('Imported ' + count + ' resources! You can now remove this button.', 'success');
+            document.getElementById('seedBtnContainer').style.display = 'none';
+            await window.loadResources();
+        } catch (e) { showStatus('Error importing: ' + e.message, 'error'); }
+    }
+    window.seedStaticResources = seedStaticResources;
 
     async function saveSpeaker() {
         const editId = document.getElementById('speakerEditId').value;
@@ -1118,6 +1156,7 @@
         document.getElementById('resourceAuthor').value = item.author || '';
         document.getElementById('resourceDesc').value = item.description || '';
         document.getElementById('resourceLink').value = item.link || '';
+        document.getElementById('resourceCover').value = item.cover || '';
     }
     window.editResource = editResource;
 

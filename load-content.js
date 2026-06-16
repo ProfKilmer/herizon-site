@@ -79,24 +79,32 @@ export async function loadTeamContent() {
 export async function loadResourcesContent() {
     try {
         const snap = await getDocs(collection(db, 'resources'));
-        if (snap.empty) return;
+        if (snap.empty) return; // Keep static content as fallback
 
         const grid = document.getElementById('resourceGrid');
         if (!grid) return;
 
-        // Append Firebase resources AFTER existing static content (don't replace)
+        // Replace static content with Firebase resources (single source of truth)
+        grid.innerHTML = '';
         const typeLabels = { book: 'Book', article: 'Article', research: 'Research', advocacy: 'Advocacy' };
         snap.forEach(d => {
             const item = d.data();
             const card = document.createElement('div');
             card.className = 'resource-card';
             card.setAttribute('data-type', item.type);
+
+            const coverHtml = item.cover ? '<img src="' + esc(item.cover) + '" alt="' + esc(item.title) + ' cover" class="resource-cover">' : '';
+            const titleHtml = item.link ? '<h4><a href="' + esc(item.link) + '" target="_blank" style="color:var(--navy);text-decoration:none;">' + esc(item.title) + '</a></h4>' : '<h4>' + esc(item.title) + '</h4>';
+            const authorPrefix = (item.type === 'book') ? 'by ' : '';
+            const learnMore = (item.link && item.type !== 'book') ? '<p style="margin-top:8px;"><a href="' + esc(item.link) + '" target="_blank" style="color:#c9a84c;">Learn More &rarr;</a></p>' : '';
+
             card.innerHTML = `
+                    ${coverHtml}
                     <span class="resource-type">${typeLabels[item.type] || item.type}</span>
-                    <h4>${esc(item.title)}</h4>
-                    <span class="resource-author">by ${esc(item.author)}</span>
+                    ${titleHtml}
+                    <span class="resource-author">${authorPrefix}${esc(item.author)}</span>
                     <p>${esc(item.description)}</p>
-                    ${item.link ? '<p style="margin-top:8px;"><a href="' + esc(item.link) + '" target="_blank" style="color:#c9a84c;">Learn More &rarr;</a></p>' : ''}`;
+                    ${learnMore}`;
             grid.appendChild(card);
         });
     } catch (e) { console.log('Using static resource content.'); }
