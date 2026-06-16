@@ -340,7 +340,7 @@ nav {
 }
 .subscribe-form input::placeholder { color: rgba(255,255,255,0.4); }
 .subscribe-form select option { color: var(--text); background: #fff; }
-.connect-info h3 {
+.subscribe-form h3, .connect-info h3 {
   font-family: 'Playfair Display', serif;
   font-size: 1.3rem; margin-bottom: 16px;
 }
