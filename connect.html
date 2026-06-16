@@ -40,25 +40,14 @@
     <!-- Connect Section -->
     <section class="section section-dark">
         <div class="connect-grid">
-            <!-- Left Column: Subscribe Form -->
+            <!-- Left Column: Join the Community -->
             <div class="subscribe-form">
                 <h3>Join the Herizon Community</h3>
-                <form onsubmit="handleSubscribe(event)">
-                    <input type="text" id="fullName" placeholder="Full Name" required>
-                    <input type="email" id="email" placeholder="Email" required>
-                    <select id="hearAbout" required>
-                        <option value="">How did you hear about us?</option>
-                        <option value="Social Media">Social Media</option>
-                        <option value="Friend/Family">Friend/Family</option>
-                        <option value="School">School</option>
-                        <option value="Conference">Conference</option>
-                        <option value="Other">Other</option>
-                    </select>
-                    <button type="submit" class="btn-primary">Join the Organization</button>
-                </form>
-                <div id="subscribeMsg" class="subscribeMsg" style="display: none; margin-top: 20px; padding: 16px; border-radius: 8px; background-color: rgba(201, 168, 76, 0.2); color: var(--warm-gold); text-align: center; font-size: 0.95rem;">
-                    Thank you for joining the movement. We'll be in touch.
-                </div>
+                <p style="color: rgba(255,255,255,0.85); font-size: 0.95rem; line-height: 1.7; margin-bottom: 24px;">
+                    Stay connected with Herizon! Sign up to receive updates on upcoming events, resources, and opportunities to get involved.
+                </p>
+                <!-- TODO: Replace # with Google Form URL once created -->
+                <a href="#" id="joinFormLink" target="_blank" class="btn-primary" style="display: inline-block; text-decoration: none; text-align: center;">Join the Community</a>
             </div>
 
             <!-- Right Column: Contact Info & Social Links -->
@@ -92,30 +81,6 @@
     </script>
     <!-- Scripts -->
     <script>
-        // Handle Subscribe Form
-        function handleSubscribe(event) {
-            event.preventDefault();
-
-            // Get form values
-            const fullName = document.getElementById('fullName').value;
-            const email = document.getElementById('email').value;
-            const hearAbout = document.getElementById('hearAbout').value;
-
-            // Clear form
-            document.getElementById('fullName').value = '';
-            document.getElementById('email').value = '';
-            document.getElementById('hearAbout').value = '';
-
-            // Show success message
-            const subscribeMsg = document.getElementById('subscribeMsg');
-            subscribeMsg.style.display = 'block';
-
-            // Hide message after 4 seconds
-            setTimeout(function() {
-                subscribeMsg.style.display = 'none';
-            }, 4000);
-        }
-
         // Mobile Hamburger Toggle
         const hamburger = document.getElementById('hamburger');
         const navLinks = document.getElementById('navLinks');
