@@ -121,7 +121,7 @@ export async function loadConferenceContent() {
             if (subtitle) {
                 const datePart = info.date || '[Date TBD]';
                 const locPart = info.location || '[Location TBD]';
-                subtitle.textContent = '1st Annual · ' + datePart + ' · ' + locPart;
+                subtitle.textContent = datePart + ' · ' + locPart;
             }
         }
 
