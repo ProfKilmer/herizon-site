@@ -570,12 +570,13 @@
         const items = [];
         snap.forEach(d => items.push({ id: d.id, ...d.data() }));
         items.sort((a, b) => (roleOrder[a.role] || 99) - (roleOrder[b.role] || 99));
+        window._teamItems = items;
         items.forEach(item => {
             const photoThumb = item.photo ? `<img src="${esc(item.photo)}" style="width:50px;height:50px;border-radius:50%;object-fit:cover;margin-right:12px;vertical-align:middle;">` : '';
             list.innerHTML += `
                 <div class="admin-card">
                     <div class="card-actions">
-                        <button class="btn-edit" onclick="editTeamMember('${item.id}', '${esc(item.name)}', '${esc(item.role)}', '${esc(item.photo || '')}', '${esc(item.bio || '')}')">Edit</button>
+                        <button class="btn-edit" onclick="editTeamMember('${item.id}')">Edit</button>
                         <button class="btn-delete" onclick="deleteItem('team', '${item.id}')">Delete</button>
                     </div>
                     <h4>${photoThumb}${esc(item.name)}</h4>
@@ -593,13 +594,15 @@
         const list = document.getElementById('resourcesList');
         list.innerHTML = '';
         const typeLabels = { book: 'Book', article: 'Article', research: 'Research', advocacy: 'Advocacy' };
-        snap.forEach(d => {
-            const item = d.data();
+        const items = [];
+        snap.forEach(d => items.push({ id: d.id, ...d.data() }));
+        window._resourceItems = items;
+        items.forEach(item => {
             list.innerHTML += `
                 <div class="admin-card">
                     <div class="card-actions">
-                        <button class="btn-edit" onclick="editResource('${d.id}', '${esc(item.title)}', '${esc(item.type)}', '${esc(item.author)}', '${esc(item.description)}', '${esc(item.link || '')}')">Edit</button>
-                        <button class="btn-delete" onclick="deleteItem('resources', '${d.id}')">Delete</button>
+                        <button class="btn-edit" onclick="editResource('${item.id}')">Edit</button>
+                        <button class="btn-delete" onclick="deleteItem('resources', '${item.id}')">Delete</button>
                     </div>
                     <h4>${esc(item.title)}</h4>
                     <div class="card-subtitle">${typeLabels[item.type] || item.type}</div>
@@ -607,7 +610,7 @@
                     ${item.link ? '<p style="margin-top:6px;"><a href="' + esc(item.link) + '" target="_blank" style="color:var(--warm-gold);">View Link</a></p>' : ''}
                 </div>`;
         });
-        if (list.innerHTML === '') list.innerHTML = '<p style="color:#888;">No resources yet.</p>';
+        if (items.length === 0) list.innerHTML = '<p style="color:#888;">No resources yet.</p>';
     }
     window.loadResources = loadResources;
 
@@ -616,20 +619,22 @@
         const snap = await getDocs(collection(db, 'speakers'));
         const list = document.getElementById('speakersList');
         list.innerHTML = '';
-        snap.forEach(d => {
-            const item = d.data();
+        const items = [];
+        snap.forEach(d => items.push({ id: d.id, ...d.data() }));
+        window._speakerItems = items;
+        items.forEach(item => {
             list.innerHTML += `
                 <div class="admin-card">
                     <div class="card-actions">
-                        <button class="btn-edit" onclick="editSpeaker('${d.id}', '${esc(item.name)}', '${esc(item.title)}', '${esc(item.bio)}')">Edit</button>
-                        <button class="btn-delete" onclick="deleteItem('speakers', '${d.id}')">Delete</button>
+                        <button class="btn-edit" onclick="editSpeaker('${item.id}')">Edit</button>
+                        <button class="btn-delete" onclick="deleteItem('speakers', '${item.id}')">Delete</button>
                     </div>
                     <h4>${esc(item.name)}</h4>
                     <div class="card-subtitle">${esc(item.title)}</div>
                     <p>${esc(item.bio)}</p>
                 </div>`;
         });
-        if (list.innerHTML === '') list.innerHTML = '<p style="color:#888;">No speakers yet.</p>';
+        if (items.length === 0) list.innerHTML = '<p style="color:#888;">No speakers yet.</p>';
     }
     window.loadSpeakers = loadSpeakers;
 
@@ -641,11 +646,12 @@
         const items = [];
         snap.forEach(d => items.push({ id: d.id, ...d.data() }));
         items.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+        window._scheduleItems = items;
         items.forEach(item => {
             list.innerHTML += `
                 <div class="admin-card">
                     <div class="card-actions">
-                        <button class="btn-edit" onclick="editScheduleItem('${item.id}', '${esc(item.time)}', '${esc(item.title)}', '${esc(item.description)}')">Edit</button>
+                        <button class="btn-edit" onclick="editScheduleItem('${item.id}')">Edit</button>
                         <button class="btn-delete" onclick="deleteItem('schedule', '${item.id}')">Delete</button>
                     </div>
                     <h4>${esc(item.time)} — ${esc(item.title)}</h4>
@@ -710,13 +716,15 @@
         const list = document.getElementById('discpostsList');
         list.innerHTML = '';
         const catLabels = { workplace:'Workplace', school:'School', negotiation:'Negotiation', leadership:'Leadership', 'work-life-balance':'Work-Life Balance' };
-        snap.forEach(d => {
-            const item = d.data();
+        const postItems = [];
+        snap.forEach(d => postItems.push({ id: d.id, ...d.data() }));
+        window._discpostItems = postItems;
+        postItems.forEach(item => {
             list.innerHTML += `
                 <div class="admin-card">
                     <div class="card-actions">
-                        <button class="btn-edit" onclick="editDiscPost('${d.id}', '${esc(item.author)}', '${esc(item.category)}', '${esc(item.title)}', '${esc(item.body)}')">Edit</button>
-                        <button class="btn-delete" onclick="deleteItem('discposts', '${d.id}')">Delete</button>
+                        <button class="btn-edit" onclick="editDiscPost('${item.id}')">Edit</button>
+                        <button class="btn-delete" onclick="deleteItem('discposts', '${item.id}')">Delete</button>
                     </div>
                     <h4>${esc(item.title)}</h4>
                     <div class="card-subtitle">${catLabels[item.category] || item.category}</div>
@@ -724,7 +732,7 @@
                     <p style="margin-top:8px;color:#888;font-size:0.85rem;">— ${esc(item.author)}</p>
                 </div>`;
         });
-        if (list.innerHTML === '') list.innerHTML = '<p style="color:#888;">No featured posts yet.</p>';
+        if (postItems.length === 0) list.innerHTML = '<p style="color:#888;">No featured posts yet.</p>';
     }
     window.loadDiscussions = loadDiscussions;
 
@@ -1082,61 +1090,71 @@
     window.saveSocialLinks = saveSocialLinks;
 
     // ── EDIT FUNCTIONS ──
-    function editTeamMember(id, name, role, photo, bio) {
+    function editTeamMember(id) {
+        const item = (window._teamItems || []).find(t => t.id === id);
+        if (!item) { showStatus('Could not find team member to edit.', 'error'); return; }
         document.getElementById('teamForm').style.display = 'block';
         document.getElementById('teamFormTitle').textContent = 'Edit Team Member';
         document.getElementById('teamEditId').value = id;
-        document.getElementById('teamName').value = name;
-        document.getElementById('teamRole').value = role;
-        document.getElementById('teamPhoto').value = photo;
+        document.getElementById('teamName').value = item.name || '';
+        document.getElementById('teamRole').value = item.role || 'Advisor';
+        document.getElementById('teamPhoto').value = item.photo || '';
         document.getElementById('teamPhotoFile').value = '';
-        document.getElementById('teamPhotoPreview').innerHTML = photo
-            ? '<img src="' + photo + '" style="width:80px;height:80px;border-radius:8px;object-fit:cover;"><span style="font-size:0.8rem;color:#888;margin-left:8px;">Current photo. Choose a new file to replace.</span>'
+        document.getElementById('teamPhotoPreview').innerHTML = item.photo
+            ? '<img src="' + item.photo + '" style="width:80px;height:80px;border-radius:8px;object-fit:cover;"><span style="font-size:0.8rem;color:#888;margin-left:8px;">Current photo. Choose a new file to replace.</span>'
             : '';
-        document.getElementById('teamBio').value = bio;
+        document.getElementById('teamBio').value = item.bio || '';
     }
     window.editTeamMember = editTeamMember;
 
-    function editResource(id, title, type, author, desc, link) {
+    function editResource(id) {
+        const item = (window._resourceItems || []).find(t => t.id === id);
+        if (!item) { showStatus('Could not find resource to edit.', 'error'); return; }
         document.getElementById('resourcesForm').style.display = 'block';
         document.getElementById('resourcesFormTitle').textContent = 'Edit Resource';
         document.getElementById('resourceEditId').value = id;
-        document.getElementById('resourceTitle').value = title;
-        document.getElementById('resourceType').value = type;
-        document.getElementById('resourceAuthor').value = author;
-        document.getElementById('resourceDesc').value = desc;
-        document.getElementById('resourceLink').value = link;
+        document.getElementById('resourceTitle').value = item.title || '';
+        document.getElementById('resourceType').value = item.type || 'book';
+        document.getElementById('resourceAuthor').value = item.author || '';
+        document.getElementById('resourceDesc').value = item.description || '';
+        document.getElementById('resourceLink').value = item.link || '';
     }
     window.editResource = editResource;
 
-    function editSpeaker(id, name, title, bio) {
+    function editSpeaker(id) {
+        const item = (window._speakerItems || []).find(t => t.id === id);
+        if (!item) { showStatus('Could not find speaker to edit.', 'error'); return; }
         document.getElementById('speakersForm').style.display = 'block';
         document.getElementById('speakersFormTitle').textContent = 'Edit Speaker';
         document.getElementById('speakerEditId').value = id;
-        document.getElementById('speakerName').value = name;
-        document.getElementById('speakerTitle').value = title;
-        document.getElementById('speakerBio').value = bio;
+        document.getElementById('speakerName').value = item.name || '';
+        document.getElementById('speakerTitle').value = item.title || '';
+        document.getElementById('speakerBio').value = item.bio || '';
     }
     window.editSpeaker = editSpeaker;
 
-    function editScheduleItem(id, time, title, desc) {
+    function editScheduleItem(id) {
+        const item = (window._scheduleItems || []).find(t => t.id === id);
+        if (!item) { showStatus('Could not find schedule item to edit.', 'error'); return; }
         document.getElementById('scheduleForm').style.display = 'block';
         document.getElementById('scheduleFormTitle').textContent = 'Edit Schedule Item';
         document.getElementById('scheduleEditId').value = id;
-        document.getElementById('scheduleTime').value = time;
-        document.getElementById('scheduleTitle').value = title;
-        document.getElementById('scheduleDesc').value = desc;
+        document.getElementById('scheduleTime').value = item.time || '';
+        document.getElementById('scheduleTitle').value = item.title || '';
+        document.getElementById('scheduleDesc').value = item.description || '';
     }
     window.editScheduleItem = editScheduleItem;
 
-    function editDiscPost(id, author, category, title, body) {
+    function editDiscPost(id) {
+        const item = (window._discpostItems || []).find(t => t.id === id);
+        if (!item) { showStatus('Could not find post to edit.', 'error'); return; }
         document.getElementById('discpostsForm').style.display = 'block';
         document.getElementById('discpostsFormTitle').textContent = 'Edit Featured Post';
         document.getElementById('discpostEditId').value = id;
-        document.getElementById('discpostAuthor').value = author;
-        document.getElementById('discpostCategory').value = category;
-        document.getElementById('discpostTitle').value = title;
-        document.getElementById('discpostBody').value = body;
+        document.getElementById('discpostAuthor').value = item.author || '';
+        document.getElementById('discpostCategory').value = item.category || 'workplace';
+        document.getElementById('discpostTitle').value = item.title || '';
+        document.getElementById('discpostBody').value = item.body || '';
     }
     window.editDiscPost = editDiscPost;
 
