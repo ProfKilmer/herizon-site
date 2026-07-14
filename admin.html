@@ -299,6 +299,12 @@
                             <input type="text" id="speakerTitle" placeholder="e.g. Keynote Speaker">
                         </div>
                         <div class="form-row">
+                            <label>Photo (optional)</label>
+                            <input type="file" id="speakerPhotoFile" accept="image/*" style="padding:8px;">
+                            <div id="speakerPhotoPreview" style="margin-top:8px;"></div>
+                            <input type="hidden" id="speakerPhoto">
+                        </div>
+                        <div class="form-row">
                             <label>Bio</label>
                             <textarea id="speakerBio" placeholder="Short bio..."></textarea>
                         </div>
@@ -883,6 +889,9 @@
             document.getElementById('speakerEditId').value = '';
             document.getElementById('speakerName').value = '';
             document.getElementById('speakerTitle').value = '';
+            document.getElementById('speakerPhoto').value = '';
+            document.getElementById('speakerPhotoFile').value = '';
+            document.getElementById('speakerPhotoPreview').innerHTML = '';
             document.getElementById('speakerBio').value = '';
             document.getElementById('speakersFormTitle').textContent = 'Add Speaker';
         } else if (type === 'schedule') {
@@ -984,9 +993,29 @@
 
     async function saveSpeaker() {
         const editId = document.getElementById('speakerEditId').value;
+        const fileInput = document.getElementById('speakerPhotoFile');
+        const existingPhoto = document.getElementById('speakerPhoto').value;
+        let photoURL = existingPhoto;
+
+        // Upload photo if a new file was selected
+        if (fileInput.files && fileInput.files[0]) {
+            showStatus('Uploading photo...', 'success');
+            try {
+                const file = fileInput.files[0];
+                const fileName = Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._-]/g, '');
+                const storageRef = window._ref(window._storage, 'speaker-photos/' + fileName);
+                await window._uploadBytes(storageRef, file);
+                photoURL = await window._getDownloadURL(storageRef);
+            } catch (e) {
+                showStatus('Photo upload failed: ' + e.message, 'error');
+                return;
+            }
+        }
+
         const data = {
             name: document.getElementById('speakerName').value,
             title: document.getElementById('speakerTitle').value,
+            photo: photoURL,
             bio: document.getElementById('speakerBio').value
         };
         if (!data.name) { showStatus('Name is required.', 'error'); return; }
@@ -1240,6 +1269,11 @@
         document.getElementById('speakerEditId').value = id;
         document.getElementById('speakerName').value = item.name || '';
         document.getElementById('speakerTitle').value = item.title || '';
+        document.getElementById('speakerPhoto').value = item.photo || '';
+        document.getElementById('speakerPhotoFile').value = '';
+        document.getElementById('speakerPhotoPreview').innerHTML = item.photo
+            ? '<img src="' + item.photo + '" style="width:80px;height:80px;border-radius:50%;object-fit:cover;"><span style="font-size:0.8rem;color:#888;margin-left:8px;">Current photo. Choose a new file to replace.</span>'
+            : '';
         document.getElementById('speakerBio').value = item.bio || '';
     }
     window.editSpeaker = editSpeaker;

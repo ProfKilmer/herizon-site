@@ -133,9 +133,12 @@ export async function loadConferenceContent() {
                 grid.innerHTML = '';
                 speakerSnap.forEach(d => {
                     const s = d.data();
+                    const avatarHtml = s.photo
+                        ? '<img src="' + esc(s.photo) + '" alt="' + esc(s.name) + '" class="speaker-photo">'
+                        : '<div class="speaker-avatar">' + esc(s.name.charAt(0)) + '</div>';
                     grid.innerHTML += `
                         <div class="speaker-card">
-                            <div class="speaker-avatar">${esc(s.name.charAt(0))}</div>
+                            ${avatarHtml}
                             <h4>${esc(s.name)}</h4>
                             <p class="speaker-title">${esc(s.title)}</p>
                             <p>${esc(s.bio)}</p>

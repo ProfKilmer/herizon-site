@@ -199,6 +199,10 @@ nav {
   margin: 0 auto 20px; display: flex; align-items: center;
   justify-content: center; font-size: 2rem; color: var(--warm-gold);
 }
+.speaker-photo {
+  width: 90px; height: 90px; border-radius: 50%;
+  object-fit: cover; margin: 0 auto 20px; display: block;
+}
 .speaker-card h4 {
   font-family: 'Playfair Display', serif;
   font-size: 1.1rem; color: var(--navy); margin-bottom: 4px;
