@@ -160,6 +160,25 @@ export async function loadConferenceContent() {
                     </div>`).join('');
             }
         }
+        // Sponsors
+        const sponsorSnap = await getDocs(collection(db, 'sponsors'));
+        const sponsorGrid = document.getElementById('sponsorsGrid');
+        if (sponsorGrid) {
+            if (!sponsorSnap.empty) {
+                const tierOrder = { 'Platinum': 0, 'Gold': 1, 'Silver': 2 };
+                const sponsors = [];
+                sponsorSnap.forEach(d => sponsors.push(d.data()));
+                sponsors.sort((a, b) => (tierOrder[a.tier] ?? 99) - (tierOrder[b.tier] ?? 99));
+                sponsorGrid.innerHTML = sponsors.map(s => `
+                    <div class="sponsor-card">
+                        ${s.logo ? '<img src="' + esc(s.logo) + '" alt="' + esc(s.name) + ' logo" class="sponsor-logo">' : ''}
+                        <p class="sponsor-level">${esc(s.tier)}</p>
+                        <h4>${esc(s.name)}</h4>
+                    </div>`).join('');
+            } else {
+                sponsorGrid.innerHTML = '';
+            }
+        }
     } catch (e) { console.log('Using static conference content.'); }
 }
 

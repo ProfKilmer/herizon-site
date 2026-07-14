@@ -332,6 +332,37 @@
                     </div>
                 </div>
                 <div id="scheduleList"></div>
+
+                <!-- Sponsors -->
+                <h3 style="margin: 28px 0 16px; font-family: 'Playfair Display', serif; color: var(--navy);">Sponsors</h3>
+                <button class="btn-add" onclick="showAddForm('sponsors')">+ Add Sponsor</button>
+                <div id="sponsorsForm" style="display:none;">
+                    <div class="admin-form">
+                        <h3 id="sponsorsFormTitle">Add Sponsor</h3>
+                        <input type="hidden" id="sponsorEditId">
+                        <div class="form-row">
+                            <label>Sponsor Name</label>
+                            <input type="text" id="sponsorName" placeholder="Company name">
+                        </div>
+                        <div class="form-row">
+                            <label>Tier</label>
+                            <select id="sponsorTier">
+                                <option value="Platinum">Platinum</option>
+                                <option value="Gold">Gold</option>
+                                <option value="Silver">Silver</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <label>Logo (optional)</label>
+                            <input type="file" id="sponsorLogoFile" accept="image/*" style="padding:8px;">
+                            <div id="sponsorLogoPreview" style="margin-top:8px;"></div>
+                            <input type="hidden" id="sponsorLogo">
+                        </div>
+                        <button class="btn-save" onclick="saveSponsor()">Save</button>
+                        <button class="btn-cancel" onclick="hideForm('sponsors')">Cancel</button>
+                    </div>
+                </div>
+                <div id="sponsorsList"></div>
             </div>
 
             <!-- MISSION Section -->
@@ -557,6 +588,7 @@
         await loadResources();
         await loadSpeakers();
         await loadSchedule();
+        await loadSponsors();
         await loadConferenceInfo();
         await loadMission();
         await loadAbout();
@@ -665,6 +697,30 @@
         if (list.innerHTML === '') list.innerHTML = '<p style="color:#888;">No schedule items yet.</p>';
     }
     window.loadSchedule = loadSchedule;
+
+    // ── SPONSORS ──
+    async function loadSponsors() {
+        const snap = await getDocs(collection(db, 'sponsors'));
+        const list = document.getElementById('sponsorsList');
+        list.innerHTML = '';
+        const items = [];
+        snap.forEach(d => items.push({ id: d.id, ...d.data() }));
+        window._sponsorItems = items;
+        items.forEach(item => {
+            list.innerHTML += `
+                <div class="admin-card">
+                    <div class="card-actions">
+                        <button class="btn-edit" onclick="editSponsor('${item.id}')">Edit</button>
+                        <button class="btn-delete" onclick="deleteItem('sponsors', '${item.id}')">Delete</button>
+                    </div>
+                    <h4>${esc(item.name)}</h4>
+                    <div class="card-subtitle">${esc(item.tier)}</div>
+                    ${item.logo ? '<p style="margin-top:6px;"><img src="' + esc(item.logo) + '" style="max-width:80px;max-height:40px;object-fit:contain;"></p>' : '<p style="color:#888;font-size:0.85rem;">No logo</p>'}
+                </div>`;
+        });
+        if (items.length === 0) list.innerHTML = '<p style="color:#888;">No sponsors yet.</p>';
+    }
+    window.loadSponsors = loadSponsors;
 
     // ── CONFERENCE INFO ──
     async function loadConferenceInfo() {
@@ -835,6 +891,14 @@
             document.getElementById('scheduleTitle').value = '';
             document.getElementById('scheduleDesc').value = '';
             document.getElementById('scheduleFormTitle').textContent = 'Add Schedule Item';
+        } else if (type === 'sponsors') {
+            document.getElementById('sponsorEditId').value = '';
+            document.getElementById('sponsorName').value = '';
+            document.getElementById('sponsorTier').value = 'Gold';
+            document.getElementById('sponsorLogo').value = '';
+            document.getElementById('sponsorLogoFile').value = '';
+            document.getElementById('sponsorLogoPreview').innerHTML = '';
+            document.getElementById('sponsorsFormTitle').textContent = 'Add Sponsor';
         } else if (type === 'discposts') {
             document.getElementById('discpostEditId').value = '';
             document.getElementById('discpostAuthor').value = '';
@@ -959,6 +1023,46 @@
         } catch (e) { showStatus('Error: ' + e.message, 'error'); }
     }
     window.saveScheduleItem = saveScheduleItem;
+
+    async function saveSponsor() {
+        const editId = document.getElementById('sponsorEditId').value;
+        const fileInput = document.getElementById('sponsorLogoFile');
+        const existingLogo = document.getElementById('sponsorLogo').value;
+        let logoURL = existingLogo;
+
+        // Upload logo if a new file was selected
+        if (fileInput.files && fileInput.files[0]) {
+            showStatus('Uploading logo...', 'success');
+            try {
+                const file = fileInput.files[0];
+                const fileName = Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._-]/g, '');
+                const storageRef = window._ref(window._storage, 'sponsor-logos/' + fileName);
+                await window._uploadBytes(storageRef, file);
+                logoURL = await window._getDownloadURL(storageRef);
+            } catch (e) {
+                showStatus('Logo upload failed: ' + e.message, 'error');
+                return;
+            }
+        }
+
+        const data = {
+            name: document.getElementById('sponsorName').value,
+            tier: document.getElementById('sponsorTier').value,
+            logo: logoURL
+        };
+        if (!data.name) { showStatus('Sponsor name is required.', 'error'); return; }
+        try {
+            if (editId) {
+                await window._updateDoc(window._doc(window._db, 'sponsors', editId), data);
+            } else {
+                await window._addDoc(window._collection(window._db, 'sponsors'), data);
+            }
+            hideForm('sponsors');
+            showStatus('Sponsor saved!', 'success');
+            await window.loadSponsors();
+        } catch (e) { showStatus('Error: ' + e.message, 'error'); }
+    }
+    window.saveSponsor = saveSponsor;
 
     async function saveConferenceInfo() {
         const data = {
@@ -1152,6 +1256,22 @@
     }
     window.editScheduleItem = editScheduleItem;
 
+    function editSponsor(id) {
+        const item = (window._sponsorItems || []).find(t => t.id === id);
+        if (!item) { showStatus('Could not find sponsor to edit.', 'error'); return; }
+        document.getElementById('sponsorsForm').style.display = 'block';
+        document.getElementById('sponsorsFormTitle').textContent = 'Edit Sponsor';
+        document.getElementById('sponsorEditId').value = id;
+        document.getElementById('sponsorName').value = item.name || '';
+        document.getElementById('sponsorTier').value = item.tier || 'Gold';
+        document.getElementById('sponsorLogo').value = item.logo || '';
+        document.getElementById('sponsorLogoFile').value = '';
+        document.getElementById('sponsorLogoPreview').innerHTML = item.logo
+            ? '<img src="' + item.logo + '" style="max-width:80px;max-height:40px;object-fit:contain;"><span style="font-size:0.8rem;color:#888;margin-left:8px;">Current logo. Choose a new file to replace.</span>'
+            : '';
+    }
+    window.editSponsor = editSponsor;
+
     function editDiscPost(id) {
         const item = (window._discpostItems || []).find(t => t.id === id);
         if (!item) { showStatus('Could not find post to edit.', 'error'); return; }
@@ -1175,6 +1295,7 @@
             else if (collectionName === 'resources') await window.loadResources();
             else if (collectionName === 'speakers') await window.loadSpeakers();
             else if (collectionName === 'schedule') await window.loadSchedule();
+            else if (collectionName === 'sponsors') await window.loadSponsors();
             else if (collectionName === 'discposts') await window.loadDiscussions();
         } catch (e) { showStatus('Error: ' + e.message, 'error'); }
     }
