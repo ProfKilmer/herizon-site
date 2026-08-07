@@ -333,6 +333,10 @@
                             <label>Description</label>
                             <textarea id="scheduleDesc" placeholder="Brief description..."></textarea>
                         </div>
+                        <div class="form-row">
+                            <label>Sort Order (lower numbers appear first)</label>
+                            <input type="number" id="scheduleSortOrder" placeholder="e.g. 1, 2, 3..." value="0">
+                        </div>
                         <button class="btn-save" onclick="saveScheduleItem()">Save</button>
                         <button class="btn-cancel" onclick="hideForm('schedule')">Cancel</button>
                     </div>
@@ -697,6 +701,7 @@
                         <button class="btn-delete" onclick="deleteItem('schedule', '${item.id}')">Delete</button>
                     </div>
                     <h4>${esc(item.time)} — ${esc(item.title)}</h4>
+                    <div class="card-subtitle">Sort order: ${item.sortOrder || 0}</div>
                     <p>${esc(item.description)}</p>
                 </div>`;
         });
@@ -899,6 +904,7 @@
             document.getElementById('scheduleTime').value = '';
             document.getElementById('scheduleTitle').value = '';
             document.getElementById('scheduleDesc').value = '';
+            document.getElementById('scheduleSortOrder').value = '0';
             document.getElementById('scheduleFormTitle').textContent = 'Add Schedule Item';
         } else if (type === 'sponsors') {
             document.getElementById('sponsorEditId').value = '';
@@ -1037,7 +1043,8 @@
         const data = {
             time: document.getElementById('scheduleTime').value,
             title: document.getElementById('scheduleTitle').value,
-            description: document.getElementById('scheduleDesc').value
+            description: document.getElementById('scheduleDesc').value,
+            sortOrder: parseInt(document.getElementById('scheduleSortOrder').value) || 0
         };
         if (!data.time || !data.title) { showStatus('Time and title are required.', 'error'); return; }
         try {
@@ -1287,6 +1294,7 @@
         document.getElementById('scheduleTime').value = item.time || '';
         document.getElementById('scheduleTitle').value = item.title || '';
         document.getElementById('scheduleDesc').value = item.description || '';
+        document.getElementById('scheduleSortOrder').value = item.sortOrder || 0;
     }
     window.editScheduleItem = editScheduleItem;
 

@@ -208,39 +208,13 @@
 
         <!-- Register Panel -->
         <div id="register" class="conf-panel">
-            <div class="section">
+            <div class="section" style="text-align: center;">
                 <h2>Register for the Conference</h2>
-                <p>Secure your spot at the National High School Women's Conference.</p>
-
-                <form class="register-form" onsubmit="handleRegister(event)">
-                    <div class="form-group">
-                        <label for="fullName">Full Name *</label>
-                        <input type="text" id="fullName" name="fullName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email *</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="schoolName">School Name *</label>
-                        <input type="text" id="schoolName" name="schoolName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="gradeLevel">Grade Level *</label>
-                        <select id="gradeLevel" name="gradeLevel" required>
-                            <option value="">Select a grade</option>
-                            <option value="9">9th Grade</option>
-                            <option value="10">10th Grade</option>
-                            <option value="11">11th Grade</option>
-                            <option value="12">12th Grade</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn-primary">Register Now</button>
-                </form>
-
-                <div id="registerSuccess" class="success-message" style="display: none;">
-                    <p>Thank you for registering! We've sent a confirmation email. We can't wait to see you at the conference!</p>
-                </div>
+                <p style="margin-bottom: 32px;">Secure your spot at the National High School Women's Conference.</p>
+                <p style="font-size: 1.1rem; margin-bottom: 16px;">
+                    <a href="#" target="_blank" style="color: var(--warm-gold); font-weight: 600; text-decoration: underline;">Register now through Eventbrite</a>
+                </p>
+                <p style="font-size: 0.95rem; color: #888;">Registration opens on August 10.</p>
             </div>
         </div>
 
@@ -297,18 +271,6 @@
         function toggleFaq(el) {
             const faqItem = el.parentElement;
             faqItem.classList.toggle('open');
-        }
-
-        // Handle registration form submission
-        function handleRegister(event) {
-            event.preventDefault();
-
-            // Hide form and show success message
-            const form = document.querySelector('.register-form');
-            const successMsg = document.getElementById('registerSuccess');
-
-            form.style.display = 'none';
-            successMsg.style.display = 'block';
         }
 
         // Mobile Hamburger Toggle
