@@ -27,12 +27,13 @@ export async function loadTeamContent() {
 
         const items = [];
         snap.forEach(d => items.push(d.data()));
-        const roleOrder = { 'Founder': 0, 'Advisor': 1, 'Teen Board Member': 2 };
+        const roleOrder = { 'Founder': 0, 'Advisor': 1, 'Executive Team': 2, 'Ambassador': 3 };
         items.sort((a, b) => (roleOrder[a.role] || 99) - (roleOrder[b.role] || 99));
 
         const founder = items.find(i => i.role === 'Founder');
         const advisors = items.filter(i => i.role === 'Advisor');
-        const teens = items.filter(i => i.role === 'Teen Board Member');
+        const teens = items.filter(i => i.role === 'Executive Team');
+        const ambassadors = items.filter(i => i.role === 'Ambassador');
 
         // Update founder
         const founderSection = document.getElementById('founderContent');
@@ -61,15 +62,26 @@ export async function loadTeamContent() {
                 </div>`).join('');
         }
 
-        // Update teen board
+        // Update executive team
         const teenGrid = document.getElementById('teenContent');
         if (teenGrid && teens.length > 0) {
             teenGrid.innerHTML = teens.map(t => `
                 <div class="pillar">
                     ${t.photo ? '<img src="' + esc(t.photo) + '" style="width:80px;height:80px;border-radius:50%;object-fit:cover;margin-bottom:12px;">' : '<div class="pillar-icon-circle">' + esc(t.name.charAt(0)) + '</div>'}
                     <h3>${esc(t.name)}</h3>
-                    <p class="team-role">Teen Board Member</p>
+                    <p class="team-role">Executive Team</p>
                     ${t.bio ? '<p>' + esc(t.bio) + '</p>' : ''}
+                </div>`).join('');
+        }
+
+        // Update ambassadors
+        const ambassadorGrid = document.getElementById('ambassadorContent');
+        if (ambassadorGrid && ambassadors.length > 0) {
+            ambassadorGrid.innerHTML = ambassadors.map(a => `
+                <div class="ambassador-card">
+                    ${a.photo ? '<img src="' + esc(a.photo) + '" class="ambassador-photo">' : '<div class="ambassador-avatar">' + esc(a.name.charAt(0)) + '</div>'}
+                    <h4>${esc(a.name)}</h4>
+                    ${a.bio ? '<p class="ambassador-bio">' + esc(a.bio) + '</p>' : ''}
                 </div>`).join('');
         }
     } catch (e) { console.log('Using static team content.'); }

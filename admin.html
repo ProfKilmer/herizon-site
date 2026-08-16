@@ -184,7 +184,7 @@
             <!-- TEAM Section -->
             <div id="section-team" class="admin-section active">
                 <h2>Team Members</h2>
-                <p class="section-desc">Manage the founder, advisors, and teen board members.</p>
+                <p class="section-desc">Manage the founder, advisors, executive team, and ambassadors.</p>
                 <button class="btn-add" onclick="showAddForm('team')">+ Add Team Member</button>
                 <div id="teamForm" style="display:none;">
                     <div class="admin-form">
@@ -199,7 +199,8 @@
                             <select id="teamRole">
                                 <option value="Founder">Founder</option>
                                 <option value="Advisor">Advisor</option>
-                                <option value="Teen Board Member">Teen Board Member</option>
+                                <option value="Executive Team">Executive Team</option>
+                                <option value="Ambassador">Ambassador</option>
                             </select>
                         </div>
                         <div class="form-row">
@@ -612,7 +613,7 @@
         const snap = await getDocs(collection(db, 'team'));
         const list = document.getElementById('teamList');
         list.innerHTML = '';
-        const roleOrder = { 'Founder': 0, 'Advisor': 1, 'Teen Board Member': 2 };
+        const roleOrder = { 'Founder': 0, 'Advisor': 1, 'Executive Team': 2, 'Ambassador': 3 };
         const items = [];
         snap.forEach(d => items.push({ id: d.id, ...d.data() }));
         items.sort((a, b) => (roleOrder[a.role] || 99) - (roleOrder[b.role] || 99));
