@@ -374,6 +374,32 @@
                     </div>
                 </div>
                 <div id="sponsorsList"></div>
+
+                <!-- FAQs -->
+                <h3 style="margin: 28px 0 16px; font-family: 'Playfair Display', serif; color: var(--navy);">FAQs</h3>
+                <button class="btn-add" onclick="showAddForm('faqs')">+ Add FAQ</button>
+                <button class="btn-add" id="seedFaqsBtn" style="display:none; background: var(--warm-gold); color: var(--navy); margin-left: 12px;" onclick="seedFaqs()">Import Existing FAQs</button>
+                <div id="faqsForm" style="display:none;">
+                    <div class="admin-form">
+                        <h3 id="faqsFormTitle">Add FAQ</h3>
+                        <input type="hidden" id="faqEditId">
+                        <div class="form-row">
+                            <label>Question</label>
+                            <input type="text" id="faqQuestion" placeholder="e.g. Who can attend?">
+                        </div>
+                        <div class="form-row">
+                            <label>Answer</label>
+                            <textarea id="faqAnswer" placeholder="Answer text..."></textarea>
+                        </div>
+                        <div class="form-row">
+                            <label>Sort Order (lower numbers appear first)</label>
+                            <input type="number" id="faqSortOrder" placeholder="e.g. 1, 2, 3..." value="0">
+                        </div>
+                        <button class="btn-save" onclick="saveFaq()">Save</button>
+                        <button class="btn-cancel" onclick="hideForm('faqs')">Cancel</button>
+                    </div>
+                </div>
+                <div id="faqsList"></div>
             </div>
 
             <!-- MISSION Section -->
@@ -600,6 +626,7 @@
         await loadSpeakers();
         await loadSchedule();
         await loadSponsors();
+        await loadFaqs();
         await loadConferenceInfo();
         await loadMission();
         await loadAbout();
@@ -733,6 +760,36 @@
         if (items.length === 0) list.innerHTML = '<p style="color:#888;">No sponsors yet.</p>';
     }
     window.loadSponsors = loadSponsors;
+
+    // ── FAQS ──
+    async function loadFaqs() {
+        const snap = await getDocs(collection(db, 'faqs'));
+        const list = document.getElementById('faqsList');
+        list.innerHTML = '';
+        const items = [];
+        snap.forEach(d => items.push({ id: d.id, ...d.data() }));
+        items.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+        window._faqItems = items;
+
+        // Show seed button if collection is empty
+        const seedBtn = document.getElementById('seedFaqsBtn');
+        if (seedBtn) seedBtn.style.display = items.length === 0 ? 'inline-block' : 'none';
+
+        items.forEach(item => {
+            list.innerHTML += `
+                <div class="admin-card">
+                    <div class="card-actions">
+                        <button class="btn-edit" onclick="editFaq('${item.id}')">Edit</button>
+                        <button class="btn-delete" onclick="deleteItem('faqs', '${item.id}')">Delete</button>
+                    </div>
+                    <h4>${esc(item.question)}</h4>
+                    <div class="card-subtitle">Sort order: ${item.sortOrder || 0}</div>
+                    <p>${esc(item.answer)}</p>
+                </div>`;
+        });
+        if (items.length === 0) list.innerHTML = '<p style="color:#888;">No FAQs yet. Click "Import Existing FAQs" to load the current ones, or add new ones manually.</p>';
+    }
+    window.loadFaqs = loadFaqs;
 
     // ── CONFERENCE INFO ──
     async function loadConferenceInfo() {
@@ -915,6 +972,12 @@
             document.getElementById('sponsorLogoFile').value = '';
             document.getElementById('sponsorLogoPreview').innerHTML = '';
             document.getElementById('sponsorsFormTitle').textContent = 'Add Sponsor';
+        } else if (type === 'faqs') {
+            document.getElementById('faqEditId').value = '';
+            document.getElementById('faqQuestion').value = '';
+            document.getElementById('faqAnswer').value = '';
+            document.getElementById('faqSortOrder').value = '0';
+            document.getElementById('faqsFormTitle').textContent = 'Add FAQ';
         } else if (type === 'discposts') {
             document.getElementById('discpostEditId').value = '';
             document.getElementById('discpostAuthor').value = '';
@@ -1100,6 +1163,47 @@
         } catch (e) { showStatus('Error: ' + e.message, 'error'); }
     }
     window.saveSponsor = saveSponsor;
+
+    async function saveFaq() {
+        const editId = document.getElementById('faqEditId').value;
+        const data = {
+            question: document.getElementById('faqQuestion').value,
+            answer: document.getElementById('faqAnswer').value,
+            sortOrder: parseInt(document.getElementById('faqSortOrder').value) || 0
+        };
+        if (!data.question || !data.answer) { showStatus('Question and answer are required.', 'error'); return; }
+        try {
+            if (editId) {
+                await window._updateDoc(window._doc(window._db, 'faqs', editId), data);
+            } else {
+                await window._addDoc(window._collection(window._db, 'faqs'), data);
+            }
+            hideForm('faqs');
+            showStatus('FAQ saved!', 'success');
+            await window.loadFaqs();
+        } catch (e) { showStatus('Error: ' + e.message, 'error'); }
+    }
+    window.saveFaq = saveFaq;
+
+    async function seedFaqs() {
+        const existing = [
+            { question: 'Who can attend?', answer: 'This conference is designed for high school women (grades 9-12). We welcome students of all backgrounds, interests, and experience levels. All attendees should be prepared to engage respectfully with peers and speakers.', sortOrder: 1 },
+            { question: 'Is there a cost?', answer: 'Details on registration costs and any scholarship opportunities will be announced closer to the conference date. We are committed to ensuring cost is not a barrier to attendance.', sortOrder: 2 },
+            { question: 'What should I bring?', answer: 'Bring a notebook and pen for taking notes. Comfortable shoes are recommended as you\'ll be moving between sessions. A water bottle is helpful to stay hydrated throughout the day.', sortOrder: 3 },
+            { question: 'Will there be food?', answer: 'Yes! There will be snacks provided during the break. We will do our best to accommodate common dietary restrictions — please note these during registration.', sortOrder: 4 },
+            { question: 'Can I volunteer?', answer: 'We\'d love your involvement! Please reach out through our Connect page to express interest in volunteering.', sortOrder: 5 },
+            { question: 'How do I get there?', answer: 'Location details and transportation information will be provided once the venue is confirmed. We\'re exploring options to ensure accessibility for all attendees.', sortOrder: 6 }
+        ];
+        try {
+            showStatus('Importing FAQs...', 'success');
+            for (const faq of existing) {
+                await window._addDoc(window._collection(window._db, 'faqs'), faq);
+            }
+            showStatus('6 FAQs imported!', 'success');
+            await window.loadFaqs();
+        } catch (e) { showStatus('Error: ' + e.message, 'error'); }
+    }
+    window.seedFaqs = seedFaqs;
 
     async function saveConferenceInfo() {
         const data = {
@@ -1315,6 +1419,18 @@
     }
     window.editSponsor = editSponsor;
 
+    function editFaq(id) {
+        const item = (window._faqItems || []).find(t => t.id === id);
+        if (!item) { showStatus('Could not find FAQ to edit.', 'error'); return; }
+        document.getElementById('faqsForm').style.display = 'block';
+        document.getElementById('faqsFormTitle').textContent = 'Edit FAQ';
+        document.getElementById('faqEditId').value = id;
+        document.getElementById('faqQuestion').value = item.question || '';
+        document.getElementById('faqAnswer').value = item.answer || '';
+        document.getElementById('faqSortOrder').value = item.sortOrder || 0;
+    }
+    window.editFaq = editFaq;
+
     function editDiscPost(id) {
         const item = (window._discpostItems || []).find(t => t.id === id);
         if (!item) { showStatus('Could not find post to edit.', 'error'); return; }
@@ -1339,6 +1455,7 @@
             else if (collectionName === 'speakers') await window.loadSpeakers();
             else if (collectionName === 'schedule') await window.loadSchedule();
             else if (collectionName === 'sponsors') await window.loadSponsors();
+            else if (collectionName === 'faqs') await window.loadFaqs();
             else if (collectionName === 'discposts') await window.loadDiscussions();
         } catch (e) { showStatus('Error: ' + e.message, 'error'); }
     }

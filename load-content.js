@@ -194,6 +194,21 @@ export async function loadConferenceContent() {
                 sponsorGrid.innerHTML = '';
             }
         }
+        // FAQs
+        const faqSnap = await getDocs(collection(db, 'faqs'));
+        if (!faqSnap.empty) {
+            const faqList = document.querySelector('#faqs .faq-list');
+            if (faqList) {
+                const faqs = [];
+                faqSnap.forEach(d => faqs.push(d.data()));
+                faqs.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+                faqList.innerHTML = faqs.map(f => `
+                    <div class="faq-item">
+                        <div class="faq-q" onclick="toggleFaq(this)">${esc(f.question)} <span class="toggle">+</span></div>
+                        <div class="faq-a">${esc(f.answer)}</div>
+                    </div>`).join('');
+            }
+        }
     } catch (e) { console.log('Using static conference content.'); }
 }
 
