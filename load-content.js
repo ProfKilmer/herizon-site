@@ -137,6 +137,22 @@ export async function loadConferenceContent() {
             }
         }
 
+        // Session Tracks
+        const trackSnap = await getDocs(collection(db, 'tracks'));
+        if (!trackSnap.empty) {
+            const tracksGrid = document.getElementById('tracksGrid');
+            if (tracksGrid) {
+                const tracks = [];
+                trackSnap.forEach(d => tracks.push(d.data()));
+                tracks.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+                tracksGrid.innerHTML = tracks.map(t => `
+                    <div class="schedule-card">
+                        <h4>${esc(t.name)}</h4>
+                        ${t.description ? '<p>' + esc(t.description) + '</p>' : ''}
+                    </div>`).join('');
+            }
+        }
+
         // Speakers
         const speakerSnap = await getDocs(collection(db, 'speakers'));
         if (!speakerSnap.empty) {

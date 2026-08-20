@@ -55,7 +55,7 @@
                 <p>Join us for an inspiring afternoon of keynotes, panels, and workshops designed to empower the next generation of women leaders. Hear from accomplished speakers, develop practical skills, and build meaningful connections with peers and mentors from across the nation.</p>
 
                 <h3 style="margin-top: 40px;">Session Tracks</h3>
-                <div class="schedule-grid">
+                <div class="schedule-grid" id="tracksGrid">
                     <div class="schedule-card">
                         <h4>Mentorship, Networking, and The Corporate Ladder</h4>
                     </div>
@@ -265,7 +265,22 @@
 
             // Add active class to clicked button
             btn.classList.add('active');
+
+            // Update URL hash
+            history.replaceState(null, '', '#' + panelId);
         }
+
+        // On page load or hash change, activate the correct tab
+        function activateTabFromHash() {
+            const hash = window.location.hash.replace('#', '');
+            const validTabs = ['overview', 'speakers', 'schedule', 'faqs', 'register', 'sponsors'];
+            if (hash && validTabs.includes(hash)) {
+                const btn = document.querySelector('.conf-tab[onclick*="' + hash + '"]');
+                if (btn) showConfTab(hash, btn);
+            }
+        }
+        window.addEventListener('hashchange', activateTabFromHash);
+        window.addEventListener('DOMContentLoaded', activateTabFromHash);
 
         // Toggle FAQ answers
         function toggleFaq(el) {

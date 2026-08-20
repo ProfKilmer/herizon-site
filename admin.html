@@ -284,6 +284,32 @@
                     <button class="btn-save" onclick="saveConferenceInfo()">Save Details</button>
                 </div>
 
+                <!-- Session Tracks -->
+                <h3 style="margin: 28px 0 16px; font-family: 'Playfair Display', serif; color: var(--navy);">Session Tracks</h3>
+                <button class="btn-add" onclick="showAddForm('tracks')">+ Add Track</button>
+                <button class="btn-add" id="seedTracksBtn" style="display:none; background: var(--warm-gold); color: var(--navy); margin-left: 12px;" onclick="seedTracks()">Import Existing Tracks</button>
+                <div id="tracksForm" style="display:none;">
+                    <div class="admin-form">
+                        <h3 id="tracksFormTitle">Add Session Track</h3>
+                        <input type="hidden" id="trackEditId">
+                        <div class="form-row">
+                            <label>Track Name</label>
+                            <input type="text" id="trackName" placeholder="e.g. Policy and Politics">
+                        </div>
+                        <div class="form-row">
+                            <label>Description (optional)</label>
+                            <textarea id="trackDesc" placeholder="Brief description of this track..."></textarea>
+                        </div>
+                        <div class="form-row">
+                            <label>Sort Order (lower numbers appear first)</label>
+                            <input type="number" id="trackSortOrder" placeholder="e.g. 1, 2, 3..." value="0">
+                        </div>
+                        <button class="btn-save" onclick="saveTrack()">Save</button>
+                        <button class="btn-cancel" onclick="hideForm('tracks')">Cancel</button>
+                    </div>
+                </div>
+                <div id="tracksList"></div>
+
                 <!-- Speakers -->
                 <h3 style="margin: 28px 0 16px; font-family: 'Playfair Display', serif; color: var(--navy);">Speakers</h3>
                 <button class="btn-add" onclick="showAddForm('speakers')">+ Add Speaker</button>
@@ -623,6 +649,7 @@
     async function loadAllData() {
         await loadTeam();
         await loadResources();
+        await loadTracks();
         await loadSpeakers();
         await loadSchedule();
         await loadSponsors();
@@ -687,6 +714,35 @@
         if (items.length === 0) list.innerHTML = '<p style="color:#888;">No resources yet.</p>';
     }
     window.loadResources = loadResources;
+
+    // ── SESSION TRACKS ──
+    async function loadTracks() {
+        const snap = await getDocs(collection(db, 'tracks'));
+        const list = document.getElementById('tracksList');
+        list.innerHTML = '';
+        const items = [];
+        snap.forEach(d => items.push({ id: d.id, ...d.data() }));
+        items.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+        window._trackItems = items;
+
+        const seedBtn = document.getElementById('seedTracksBtn');
+        if (seedBtn) seedBtn.style.display = items.length === 0 ? 'inline-block' : 'none';
+
+        items.forEach(item => {
+            list.innerHTML += `
+                <div class="admin-card">
+                    <div class="card-actions">
+                        <button class="btn-edit" onclick="editTrack('${item.id}')">Edit</button>
+                        <button class="btn-delete" onclick="deleteItem('tracks', '${item.id}')">Delete</button>
+                    </div>
+                    <h4>${esc(item.name)}</h4>
+                    <div class="card-subtitle">Sort order: ${item.sortOrder || 0}</div>
+                    <p>${esc(item.description || '')}</p>
+                </div>`;
+        });
+        if (items.length === 0) list.innerHTML = '<p style="color:#888;">No session tracks yet. Click "Import Existing Tracks" to load the current ones, or add new ones manually.</p>';
+    }
+    window.loadTracks = loadTracks;
 
     // ── SPEAKERS ──
     async function loadSpeakers() {
@@ -948,6 +1004,12 @@
             document.getElementById('resourceLink').value = '';
             document.getElementById('resourceCover').value = '';
             document.getElementById('resourcesFormTitle').textContent = 'Add Resource';
+        } else if (type === 'tracks') {
+            document.getElementById('trackEditId').value = '';
+            document.getElementById('trackName').value = '';
+            document.getElementById('trackDesc').value = '';
+            document.getElementById('trackSortOrder').value = '0';
+            document.getElementById('tracksFormTitle').textContent = 'Add Session Track';
         } else if (type === 'speakers') {
             document.getElementById('speakerEditId').value = '';
             document.getElementById('speakerName').value = '';
@@ -1060,6 +1122,46 @@
         } catch (e) { showStatus('Error: ' + e.message, 'error'); }
     }
     window.saveResource = saveResource;
+
+    async function saveTrack() {
+        const editId = document.getElementById('trackEditId').value;
+        const data = {
+            name: document.getElementById('trackName').value,
+            description: document.getElementById('trackDesc').value,
+            sortOrder: parseInt(document.getElementById('trackSortOrder').value) || 0
+        };
+        if (!data.name) { showStatus('Track name is required.', 'error'); return; }
+        try {
+            if (editId) {
+                await window._updateDoc(window._doc(window._db, 'tracks', editId), data);
+            } else {
+                await window._addDoc(window._collection(window._db, 'tracks'), data);
+            }
+            hideForm('tracks');
+            showStatus('Track saved!', 'success');
+            await window.loadTracks();
+        } catch (e) { showStatus('Error: ' + e.message, 'error'); }
+    }
+    window.saveTrack = saveTrack;
+
+    async function seedTracks() {
+        const existing = [
+            { name: 'Mentorship, Networking, and The Corporate Ladder', description: '', sortOrder: 1 },
+            { name: 'Negotiations, Biases, and Self-Advocacy', description: '', sortOrder: 2 },
+            { name: 'Policy and Politics', description: '', sortOrder: 3 },
+            { name: 'Career Trajectory, Work-life Balance, and Personal Finance', description: '', sortOrder: 4 },
+            { name: 'Socio-emotional Landscape for Young Women', description: '', sortOrder: 5 }
+        ];
+        try {
+            showStatus('Importing tracks...', 'success');
+            for (const track of existing) {
+                await window._addDoc(window._collection(window._db, 'tracks'), track);
+            }
+            showStatus('5 tracks imported!', 'success');
+            await window.loadTracks();
+        } catch (e) { showStatus('Error: ' + e.message, 'error'); }
+    }
+    window.seedTracks = seedTracks;
 
     async function saveSpeaker() {
         const editId = document.getElementById('speakerEditId').value;
@@ -1390,6 +1492,18 @@
     }
     window.editSpeaker = editSpeaker;
 
+    function editTrack(id) {
+        const item = (window._trackItems || []).find(t => t.id === id);
+        if (!item) { showStatus('Could not find track to edit.', 'error'); return; }
+        document.getElementById('tracksForm').style.display = 'block';
+        document.getElementById('tracksFormTitle').textContent = 'Edit Session Track';
+        document.getElementById('trackEditId').value = id;
+        document.getElementById('trackName').value = item.name || '';
+        document.getElementById('trackDesc').value = item.description || '';
+        document.getElementById('trackSortOrder').value = item.sortOrder || 0;
+    }
+    window.editTrack = editTrack;
+
     function editScheduleItem(id) {
         const item = (window._scheduleItems || []).find(t => t.id === id);
         if (!item) { showStatus('Could not find schedule item to edit.', 'error'); return; }
@@ -1452,6 +1566,7 @@
             showStatus('Item deleted.', 'success');
             if (collectionName === 'team') await window.loadTeam();
             else if (collectionName === 'resources') await window.loadResources();
+            else if (collectionName === 'tracks') await window.loadTracks();
             else if (collectionName === 'speakers') await window.loadSpeakers();
             else if (collectionName === 'schedule') await window.loadSchedule();
             else if (collectionName === 'sponsors') await window.loadSponsors();
