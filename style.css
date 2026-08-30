@@ -192,7 +192,7 @@ nav {
 
 /* ── Speaker Grid ── */
 .speakers-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  display: grid; grid-template-columns: repeat(3, 1fr);
   gap: 32px; margin-top: 32px;
 }
 .speaker-card {
@@ -454,6 +454,9 @@ footer {
 }
 
 /* ── Responsive ── */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .speakers-grid { grid-template-columns: repeat(2, 1fr); }
+}
 @media (max-width: 768px) {
   .hamburger { display: flex; }
   .nav-links {
@@ -465,4 +468,5 @@ footer {
   .hero h1 { font-size: 2.2rem; }
   .connect-grid { grid-template-columns: 1fr; }
   .conf-tabs { gap: 8px; }
+  .speakers-grid { grid-template-columns: 1fr; }
 }

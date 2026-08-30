@@ -158,20 +158,21 @@ export async function loadConferenceContent() {
         if (!speakerSnap.empty) {
             const grid = document.getElementById('speakersGrid');
             if (grid) {
-                grid.innerHTML = '';
-                speakerSnap.forEach(d => {
-                    const s = d.data();
+                const speakers = [];
+                speakerSnap.forEach(d => speakers.push(d.data()));
+                speakers.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+                grid.innerHTML = speakers.map(s => {
                     const avatarHtml = s.photo
                         ? '<img src="' + esc(s.photo) + '" alt="' + esc(s.name) + '" class="speaker-photo">'
                         : '<div class="speaker-avatar">' + esc(s.name.charAt(0)) + '</div>';
-                    grid.innerHTML += `
+                    return `
                         <div class="speaker-card">
                             ${avatarHtml}
                             <h4>${esc(s.name)}</h4>
                             <p class="speaker-title">${esc(s.title)}</p>
                             <p>${esc(s.bio)}</p>
                         </div>`;
-                });
+                }).join('');
             }
         }
 

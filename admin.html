@@ -335,6 +335,10 @@
                             <label>Bio</label>
                             <textarea id="speakerBio" placeholder="Short bio..."></textarea>
                         </div>
+                        <div class="form-row">
+                            <label>Sort Order</label>
+                            <input type="number" id="speakerSortOrder" value="0" min="0" style="width:80px;">
+                        </div>
                         <button class="btn-save" onclick="saveSpeaker()">Save</button>
                         <button class="btn-cancel" onclick="hideForm('speakers')">Cancel</button>
                     </div>
@@ -751,6 +755,7 @@
         list.innerHTML = '';
         const items = [];
         snap.forEach(d => items.push({ id: d.id, ...d.data() }));
+        items.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
         window._speakerItems = items;
         items.forEach(item => {
             list.innerHTML += `
@@ -760,7 +765,7 @@
                         <button class="btn-delete" onclick="deleteItem('speakers', '${item.id}')">Delete</button>
                     </div>
                     <h4>${esc(item.name)}</h4>
-                    <div class="card-subtitle">${esc(item.title)}</div>
+                    <div class="card-subtitle">${esc(item.title)} · Order: ${item.sortOrder || 0}</div>
                     <p>${esc(item.bio)}</p>
                 </div>`;
         });
@@ -1018,6 +1023,7 @@
             document.getElementById('speakerPhotoFile').value = '';
             document.getElementById('speakerPhotoPreview').innerHTML = '';
             document.getElementById('speakerBio').value = '';
+            document.getElementById('speakerSortOrder').value = '0';
             document.getElementById('speakersFormTitle').textContent = 'Add Speaker';
         } else if (type === 'schedule') {
             document.getElementById('scheduleEditId').value = '';
@@ -1188,7 +1194,8 @@
             name: document.getElementById('speakerName').value,
             title: document.getElementById('speakerTitle').value,
             photo: photoURL,
-            bio: document.getElementById('speakerBio').value
+            bio: document.getElementById('speakerBio').value,
+            sortOrder: parseInt(document.getElementById('speakerSortOrder').value) || 0
         };
         if (!data.name) { showStatus('Name is required.', 'error'); return; }
         try {
@@ -1489,6 +1496,7 @@
             ? '<img src="' + item.photo + '" style="width:80px;height:80px;border-radius:50%;object-fit:cover;"><span style="font-size:0.8rem;color:#888;margin-left:8px;">Current photo. Choose a new file to replace.</span>'
             : '';
         document.getElementById('speakerBio').value = item.bio || '';
+        document.getElementById('speakerSortOrder').value = item.sortOrder || 0;
     }
     window.editSpeaker = editSpeaker;
 
