@@ -215,8 +215,8 @@ nav {
   font-family: 'Playfair Display', serif;
   font-size: 1.1rem; color: var(--navy); margin-bottom: 4px;
 }
-.speaker-card .speaker-title { font-size: 0.85rem; color: var(--warm-gold); margin-bottom: 8px; }
-.speaker-card p { font-size: 0.88rem; color: #666; text-align: left; }
+.speaker-card .speaker-title { font-size: 0.85rem; color: var(--warm-gold); margin-bottom: 8px; text-align: center; }
+.speaker-card p { font-size: 0.88rem; color: #666; text-align: justify; }
 
 /* ── FAQ ── */
 .faq-list { max-width: 800px; margin: 32px auto 0; }
