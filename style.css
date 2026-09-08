@@ -216,7 +216,7 @@ nav {
   font-size: 1.1rem; color: var(--navy); margin-bottom: 4px;
 }
 .speaker-card .speaker-title { font-size: 0.85rem; color: var(--warm-gold); margin-bottom: 8px; }
-.speaker-card p { font-size: 0.88rem; color: #666; }
+.speaker-card p { font-size: 0.88rem; color: #666; text-align: left; }
 
 /* ── FAQ ── */
 .faq-list { max-width: 800px; margin: 32px auto 0; }
@@ -451,6 +451,12 @@ footer {
   font-family: 'Playfair Display', serif;
   font-size: 1.3rem; color: var(--warm-gold);
   letter-spacing: 3px; margin-bottom: 10px;
+}
+
+/* ── Eventbrite Alert Blink ── */
+@keyframes blink-alert {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
 }
 
 /* ── Responsive ── */
