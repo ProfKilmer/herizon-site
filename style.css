@@ -453,12 +453,6 @@ footer {
   letter-spacing: 3px; margin-bottom: 10px;
 }
 
-/* ── Eventbrite Alert Blink ── */
-@keyframes blink-alert {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
-}
-
 /* ── Responsive ── */
 @media (max-width: 1024px) and (min-width: 769px) {
   .speakers-grid { grid-template-columns: repeat(2, 1fr); }
