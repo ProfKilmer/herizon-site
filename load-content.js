@@ -169,7 +169,8 @@ export async function loadConferenceContent() {
                         <div class="speaker-card">
                             ${avatarHtml}
                             <h4>${esc(s.name)}</h4>
-                            <p class="speaker-title">${esc(s.title)}</p>
+                            ${s.title ? '<p class="speaker-title">' + esc(s.title) + '</p>' : ''}
+                            ${s.session ? '<p class="speaker-session">Session: ' + esc(s.session) + '</p>' : ''}
                             <p>${esc(s.bio)}</p>
                         </div>`;
                 }).join('');

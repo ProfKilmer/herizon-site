@@ -322,8 +322,12 @@
                             <input type="text" id="speakerName" placeholder="Full name">
                         </div>
                         <div class="form-row">
-                            <label>Title/Role</label>
-                            <input type="text" id="speakerTitle" placeholder="e.g. Keynote Speaker">
+                            <label>Title</label>
+                            <input type="text" id="speakerTitle" placeholder="e.g. CEO, Professor of Economics">
+                        </div>
+                        <div class="form-row">
+                            <label>Session</label>
+                            <input type="text" id="speakerSession" placeholder="e.g. Keynote Speaker, Panel on Policy and Politics">
                         </div>
                         <div class="form-row">
                             <label>Photo (optional)</label>
@@ -765,7 +769,7 @@
                         <button class="btn-delete" onclick="deleteItem('speakers', '${item.id}')">Delete</button>
                     </div>
                     <h4>${esc(item.name)}</h4>
-                    <div class="card-subtitle">${esc(item.title)} · Order: ${item.sortOrder || 0}</div>
+                    <div class="card-subtitle">${esc(item.title)}${item.session ? ' · ' + esc(item.session) : ''} · Order: ${item.sortOrder || 0}</div>
                     <p>${esc(item.bio)}</p>
                 </div>`;
         });
@@ -1019,6 +1023,7 @@
             document.getElementById('speakerEditId').value = '';
             document.getElementById('speakerName').value = '';
             document.getElementById('speakerTitle').value = '';
+            document.getElementById('speakerSession').value = '';
             document.getElementById('speakerPhoto').value = '';
             document.getElementById('speakerPhotoFile').value = '';
             document.getElementById('speakerPhotoPreview').innerHTML = '';
@@ -1193,6 +1198,7 @@
         const data = {
             name: document.getElementById('speakerName').value,
             title: document.getElementById('speakerTitle').value,
+            session: document.getElementById('speakerSession').value,
             photo: photoURL,
             bio: document.getElementById('speakerBio').value,
             sortOrder: parseInt(document.getElementById('speakerSortOrder').value) || 0
@@ -1490,6 +1496,7 @@
         document.getElementById('speakerEditId').value = id;
         document.getElementById('speakerName').value = item.name || '';
         document.getElementById('speakerTitle').value = item.title || '';
+        document.getElementById('speakerSession').value = item.session || '';
         document.getElementById('speakerPhoto').value = item.photo || '';
         document.getElementById('speakerPhotoFile').value = '';
         document.getElementById('speakerPhotoPreview').innerHTML = item.photo
