@@ -488,15 +488,11 @@ footer {
   50% { opacity: 0.4; }
 }
 
-/* ── Conference Announcement Banner ── */
-.conf-announcement {
-  text-align: center; padding: 48px 8% 40px;
-  background: linear-gradient(135deg, var(--navy), var(--plum));
-}
+/* ── Conference Announcement Badge ── */
 .conf-announcement-badge {
   display: inline-block; padding: 14px 36px; border: 2px solid var(--warm-gold);
   border-radius: 12px; background: rgba(201, 168, 76, 0.1);
-  max-width: 680px; margin: 0 auto;
+  max-width: 720px;
 }
 .conf-announcement-badge p {
   font-family: 'Playfair Display', serif; font-size: 1.15rem;
@@ -505,13 +501,14 @@ footer {
 .conf-announcement-badge a {
   color: var(--warm-gold); font-weight: 700; text-decoration: underline;
 }
-.conf-announcement-sponsors {
-  margin-top: 28px; padding-top: 20px;
-  border-top: 1px solid rgba(255,255,255,0.15);
+/* ── Homepage Sponsors Section ── */
+.conf-announcement-sponsors-section {
+  text-align: center; padding: 40px 8% 48px;
+  background: var(--ivory);
 }
-.conf-announcement-sponsors p {
-  font-size: 0.75rem; color: rgba(255,255,255,0.5);
-  letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px;
+.conf-announcement-sponsors-label {
+  font-size: 0.75rem; color: #888;
+  letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px;
 }
 
 /* ── Responsive ── */
@@ -534,9 +531,9 @@ footer {
   .sponsor-logo-platinum { max-width: 150px; max-height: 75px; }
   .sponsor-logo-gold { max-width: 110px; max-height: 55px; }
   .sponsor-logo-silver { max-width: 80px; max-height: 40px; }
-  .conf-announcement { padding: 32px 6%; }
   .conf-announcement-badge { padding: 12px 20px; }
-  .conf-announcement-badge p { font-size: 1rem; }
+  .conf-announcement-badge p { font-size: 0.95rem; }
+  .raffle-notice { white-space: normal !important; font-size: 0.82rem !important; }
   .home-sponsor-tier { gap: 20px; }
   .home-sponsor-logo-platinum { max-width: 100px; max-height: 50px; }
   .home-sponsor-logo-gold { max-width: 80px; max-height: 40px; }
