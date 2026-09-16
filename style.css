@@ -237,26 +237,54 @@ nav {
 .faq-item.open .faq-a { max-height: 300px; padding-top: 12px; }
 .faq-item.open .toggle { transform: rotate(45deg); }
 
-/* ── Sponsors ── */
-.sponsors-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 24px; margin-top: 32px;
+/* ── Sponsors (tiered) ── */
+.sponsor-tier-section {
+  margin-top: 40px; text-align: center;
 }
-.sponsor-card {
-  background: #fff; padding: 40px 24px; border-radius: 12px;
-  border: 1px solid rgba(0,0,0,0.06); text-align: center;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-}
-.sponsor-card .sponsor-level {
-  font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase;
-  color: var(--warm-gold); margin-bottom: 12px;
-}
-.sponsor-card h4 {
+.sponsor-tier-section:first-child { margin-top: 32px; }
+.sponsor-tier-heading {
   font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--navy);
+  letter-spacing: 2px; text-transform: uppercase; margin-bottom: 24px;
+  padding-bottom: 12px; border-bottom: 1px solid rgba(0,0,0,0.08);
 }
-.sponsor-logo {
-  max-width: 120px; max-height: 60px; object-fit: contain; margin-bottom: 12px;
+.sponsor-tier-logos {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  align-items: center; gap: 40px; margin-bottom: 16px;
 }
+.sponsor-item {
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+}
+.sponsor-name {
+  font-family: 'Inter', sans-serif; font-size: 0.75rem; color: #888;
+  margin-top: 8px; letter-spacing: 0.5px;
+}
+/* Logo sizes by tier */
+.sponsor-logo-platinum {
+  max-width: 200px; max-height: 100px; object-fit: contain;
+  mix-blend-mode: multiply;
+}
+.sponsor-logo-gold {
+  max-width: 150px; max-height: 75px; object-fit: contain;
+  mix-blend-mode: multiply;
+}
+.sponsor-logo-silver {
+  max-width: 110px; max-height: 55px; object-fit: contain;
+  mix-blend-mode: multiply;
+}
+.sponsorship-cta {
+  margin-top: 48px; padding: 32px; text-align: center;
+  border-top: 1px solid rgba(0,0,0,0.08);
+}
+.sponsorship-cta h3 {
+  font-family: 'Playfair Display', serif; font-size: 1.2rem;
+  color: var(--navy); margin-bottom: 8px;
+}
+.sponsorship-cta p { font-size: 0.95rem; color: #666; }
+/* Homepage sponsor logos */
+.home-sponsor-tier { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 32px; margin-bottom: 12px; }
+.home-sponsor-logo-platinum { max-width: 140px; max-height: 70px; object-fit: contain; mix-blend-mode: multiply; }
+.home-sponsor-logo-gold { max-width: 110px; max-height: 55px; object-fit: contain; mix-blend-mode: multiply; }
+.home-sponsor-logo-silver { max-width: 80px; max-height: 40px; object-fit: contain; mix-blend-mode: multiply; }
 
 /* ── Resource filters & cards ── */
 .filter-bar {
@@ -454,6 +482,38 @@ footer {
   letter-spacing: 3px; margin-bottom: 10px;
 }
 
+/* ── Flashing Notice ── */
+@keyframes blink-alert {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ── Conference Announcement Banner ── */
+.conf-announcement {
+  text-align: center; padding: 48px 8% 40px;
+  background: linear-gradient(135deg, var(--navy), var(--plum));
+}
+.conf-announcement-badge {
+  display: inline-block; padding: 14px 36px; border: 2px solid var(--warm-gold);
+  border-radius: 12px; background: rgba(201, 168, 76, 0.1);
+  max-width: 680px; margin: 0 auto;
+}
+.conf-announcement-badge p {
+  font-family: 'Playfair Display', serif; font-size: 1.15rem;
+  color: #fff; line-height: 1.7; margin: 0;
+}
+.conf-announcement-badge a {
+  color: var(--warm-gold); font-weight: 700; text-decoration: underline;
+}
+.conf-announcement-sponsors {
+  margin-top: 28px; padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.15);
+}
+.conf-announcement-sponsors p {
+  font-size: 0.75rem; color: rgba(255,255,255,0.5);
+  letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px;
+}
+
 /* ── Responsive ── */
 @media (max-width: 1024px) and (min-width: 769px) {
   .speakers-grid { grid-template-columns: repeat(2, 1fr); }
@@ -470,4 +530,15 @@ footer {
   .connect-grid { grid-template-columns: 1fr; }
   .conf-tabs { gap: 8px; }
   .speakers-grid { grid-template-columns: 1fr; }
+  .sponsor-tier-logos { gap: 24px; }
+  .sponsor-logo-platinum { max-width: 150px; max-height: 75px; }
+  .sponsor-logo-gold { max-width: 110px; max-height: 55px; }
+  .sponsor-logo-silver { max-width: 80px; max-height: 40px; }
+  .conf-announcement { padding: 32px 6%; }
+  .conf-announcement-badge { padding: 12px 20px; }
+  .conf-announcement-badge p { font-size: 1rem; }
+  .home-sponsor-tier { gap: 20px; }
+  .home-sponsor-logo-platinum { max-width: 100px; max-height: 50px; }
+  .home-sponsor-logo-gold { max-width: 80px; max-height: 40px; }
+  .home-sponsor-logo-silver { max-width: 60px; max-height: 30px; }
 }

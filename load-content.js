@@ -193,24 +193,25 @@ export async function loadConferenceContent() {
                     </div>`).join('');
             }
         }
-        // Sponsors
+        // Sponsors (tiered layout)
         const sponsorSnap = await getDocs(collection(db, 'sponsors'));
-        const sponsorGrid = document.getElementById('sponsorsGrid');
-        if (sponsorGrid) {
-            if (!sponsorSnap.empty) {
-                const tierOrder = { 'Platinum': 0, 'Gold': 1, 'Silver': 2 };
-                const sponsors = [];
-                sponsorSnap.forEach(d => sponsors.push(d.data()));
-                sponsors.sort((a, b) => (tierOrder[a.tier] ?? 99) - (tierOrder[b.tier] ?? 99));
-                sponsorGrid.innerHTML = sponsors.map(s => `
-                    <div class="sponsor-card">
-                        ${s.logo ? '<img src="' + esc(s.logo) + '" alt="' + esc(s.name) + ' logo" class="sponsor-logo">' : ''}
-                        <p class="sponsor-level">${esc(s.tier)}</p>
-                        <h4>${esc(s.name)}</h4>
-                    </div>`).join('');
-            } else {
-                sponsorGrid.innerHTML = '';
-            }
+        const sponsorContainer = document.getElementById('sponsorsTiered');
+        if (sponsorContainer && !sponsorSnap.empty) {
+            const sponsors = [];
+            sponsorSnap.forEach(d => sponsors.push(d.data()));
+            const tiers = ['Platinum', 'Gold', 'Silver'];
+            let html = '';
+            tiers.forEach(tier => {
+                const tierSponsors = sponsors.filter(s => s.tier === tier);
+                if (tierSponsors.length === 0) return;
+                const tierClass = tier.toLowerCase();
+                html += '<div class="sponsor-tier-section">';
+                html += '<h3 class="sponsor-tier-heading">' + esc(tier) + ' Sponsors</h3>';
+                html += '<div class="sponsor-tier-logos sponsor-tier-' + tierClass + '">';
+                html += tierSponsors.map(s => '<div class="sponsor-item sponsor-' + tierClass + '">' + (s.logo ? '<img src="' + esc(s.logo) + '" alt="' + esc(s.name) + ' logo" class="sponsor-logo-' + tierClass + '">' : '') + '<span class="sponsor-name">' + esc(s.name) + '</span></div>').join('');
+                html += '</div></div>';
+            });
+            sponsorContainer.innerHTML = html;
         }
         // FAQs
         const faqSnap = await getDocs(collection(db, 'faqs'));
@@ -360,4 +361,29 @@ export async function loadConnectContent() {
         if (ttEl) { if (data.tiktok) { ttEl.href = data.tiktok; ttEl.style.display = ''; } else { ttEl.style.display = 'none'; } }
         if (xEl) { if (data.twitter) { xEl.href = data.twitter; xEl.style.display = ''; } else { xEl.style.display = 'none'; } }
     } catch (e) { console.log('Using static connect content.'); }
+}
+
+// Load sponsor logos for homepage
+export async function loadHomeSponsorLogos() {
+    try {
+        const snap = await getDocs(collection(db, 'sponsors'));
+        const container = document.getElementById('homeSponsorLogos');
+        if (!container || snap.empty) return;
+
+        const sponsors = [];
+        snap.forEach(d => sponsors.push(d.data()));
+        const tiers = ['Platinum', 'Gold', 'Silver'];
+        let html = '';
+        tiers.forEach(tier => {
+            const tierSponsors = sponsors.filter(s => s.tier === tier);
+            if (tierSponsors.length === 0) return;
+            const tierClass = tier.toLowerCase();
+            html += '<div class="home-sponsor-tier">';
+            html += tierSponsors.map(s =>
+                s.logo ? '<img src="' + esc(s.logo) + '" alt="' + esc(s.name) + '" class="home-sponsor-logo-' + tierClass + '" title="' + esc(s.name) + '">' : ''
+            ).join('');
+            html += '</div>';
+        });
+        container.innerHTML = html;
+    } catch (e) { console.log('Using static homepage content.'); }
 }
