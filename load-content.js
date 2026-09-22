@@ -45,7 +45,7 @@ export async function loadTeamContent() {
                 ${founderPhoto}
                 <div class="team-founder-info">
                     <h2>${esc(founder.name)}</h2>
-                    <p class="team-role">Founder</p>
+                    <p class="team-role">Founder &amp; President</p>
                     <p class="team-bio">${esc(founder.bio || 'Bio coming soon.')}</p>
                 </div>`;
         }
