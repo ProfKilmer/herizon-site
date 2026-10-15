@@ -372,18 +372,15 @@ export async function loadHomeSponsorLogos() {
 
         const sponsors = [];
         snap.forEach(d => sponsors.push(d.data()));
-        const tiers = ['Platinum', 'Gold', 'Silver'];
-        let html = '';
-        tiers.forEach(tier => {
-            const tierSponsors = sponsors.filter(s => s.tier === tier);
-            if (tierSponsors.length === 0) return;
-            const tierClass = tier.toLowerCase();
-            html += '<div class="home-sponsor-tier">';
-            html += tierSponsors.map(s =>
-                s.logo ? '<img src="' + esc(s.logo) + '" alt="' + esc(s.name) + '" class="home-sponsor-logo-' + tierClass + '" title="' + esc(s.name) + '">' : ''
-            ).join('');
-            html += '</div>';
-        });
+        // Sort by tier priority (Platinum first, then Gold, then Silver) for consistent ordering
+        const tierOrder = { 'Platinum': 0, 'Gold': 1, 'Silver': 2 };
+        sponsors.sort((a, b) => (tierOrder[a.tier] || 9) - (tierOrder[b.tier] || 9));
+        // Render all logos in a single row, uniform size
+        let html = '<div class="home-sponsor-row">';
+        html += sponsors.map(s =>
+            s.logo ? '<img src="' + esc(s.logo) + '" alt="' + esc(s.name) + '" class="home-sponsor-logo" title="' + esc(s.name) + '">' : ''
+        ).join('');
+        html += '</div>';
         container.innerHTML = html;
     } catch (e) { console.log('Using static homepage content.'); }
 }

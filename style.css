@@ -55,9 +55,9 @@ nav {
 
 /* ── Hero ── */
 .hero {
-  min-height: 100vh; display: flex; flex-direction: column;
+  min-height: auto; display: flex; flex-direction: column;
   align-items: center; justify-content: center; text-align: center;
-  padding: 120px 8% 80px;
+  padding: 140px 8% 64px;
   background: linear-gradient(135deg, var(--navy) 0%, var(--plum) 100%);
   color: #fff;
 }
@@ -76,7 +76,7 @@ nav {
 }
 .hero p {
   max-width: 720px; font-size: 1.1rem; color: var(--text-light);
-  margin: 0 auto 48px; line-height: 1.8; text-align: center;
+  margin: 0 auto 0; line-height: 1.8; text-align: center;
 }
 .hero-btns { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
 
@@ -280,11 +280,9 @@ nav {
   color: var(--navy); margin-bottom: 8px;
 }
 .sponsorship-cta p { font-size: 0.95rem; color: #666; }
-/* Homepage sponsor logos */
-.home-sponsor-tier { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 32px; margin-bottom: 12px; }
-.home-sponsor-logo-platinum { max-width: 140px; max-height: 70px; object-fit: contain; mix-blend-mode: multiply; }
-.home-sponsor-logo-gold { max-width: 110px; max-height: 55px; object-fit: contain; mix-blend-mode: multiply; }
-.home-sponsor-logo-silver { max-width: 80px; max-height: 40px; object-fit: contain; mix-blend-mode: multiply; }
+/* Homepage sponsor logos — single row, uniform size */
+.home-sponsor-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 36px; }
+.home-sponsor-logo { max-width: 120px; max-height: 60px; object-fit: contain; mix-blend-mode: multiply; }
 
 /* ── Resource filters & cards ── */
 .filter-bar {
@@ -503,9 +501,9 @@ footer {
 }
 /* ── Homepage Sponsors Section ── */
 .conf-announcement-sponsors-section {
-  text-align: center; padding: 48px 8% 56px;
+  text-align: center; padding: 40px 8% 44px;
   background: var(--ivory);
-  border-top: 1px solid rgba(0,0,0,0.06);
+  border-top: none;
 }
 .conf-announcement-sponsors-label {
   font-family: 'Playfair Display', serif; font-size: 0.95rem;
@@ -515,7 +513,7 @@ footer {
 
 /* ── Inaugural Conference Stats ── */
 .conf-recap {
-  padding: 80px 8%;
+  padding: 64px 8% 56px;
   background: linear-gradient(135deg, var(--navy) 0%, var(--plum) 100%);
   color: #fff; text-align: center;
 }
@@ -560,7 +558,7 @@ footer {
 
 /* ── What's Next ── */
 .whats-next {
-  padding: 72px 8%;
+  padding: 56px 8%;
   background: var(--ivory);
   text-align: center;
 }
@@ -576,7 +574,7 @@ footer {
 
 /* ── Stay Connected ── */
 .stay-connected {
-  padding: 72px 8%;
+  padding: 56px 8%;
   background: linear-gradient(135deg, var(--navy) 0%, var(--plum) 100%);
   text-align: center; color: #fff;
 }
@@ -630,8 +628,6 @@ footer {
   .conf-announcement-badge { padding: 12px 20px; }
   .conf-announcement-badge p { font-size: 0.95rem; }
   .raffle-notice { white-space: normal !important; font-size: 0.82rem !important; }
-  .home-sponsor-tier { gap: 20px; }
-  .home-sponsor-logo-platinum { max-width: 100px; max-height: 50px; }
-  .home-sponsor-logo-gold { max-width: 80px; max-height: 40px; }
-  .home-sponsor-logo-silver { max-width: 60px; max-height: 30px; }
+  .home-sponsor-row { gap: 20px; }
+  .home-sponsor-logo { max-width: 80px; max-height: 40px; }
 }
