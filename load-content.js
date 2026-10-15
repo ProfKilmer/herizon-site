@@ -148,7 +148,7 @@ export async function loadConferenceContent() {
                 // Compact layout if container has tracks-compact class, otherwise full cards
                 if (tracksGrid.classList.contains('tracks-compact')) {
                     tracksGrid.innerHTML = tracks.map(t =>
-                        `<span class="track-tag">${esc(t.name)}</span>`
+                        `<span class="track-tag">${esc(t.name).replace(/ and /gi, ' &amp; ')}</span>`
                     ).join('');
                 } else {
                     tracksGrid.innerHTML = tracks.map(t => `
