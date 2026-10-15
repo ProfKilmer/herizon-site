@@ -556,6 +556,29 @@ footer {
   line-height: 1.5; letter-spacing: 0.3px;
 }
 
+/* Stats on light backgrounds (conference overview) */
+.section .conf-stats-grid .conf-stat {
+  background: rgba(0,0,0,0.03);
+  border: 1px solid rgba(0,0,0,0.08);
+}
+.section .conf-stats-grid .conf-stat:hover {
+  background: rgba(0,0,0,0.06);
+}
+.section .conf-stats-grid .conf-stat-desc {
+  color: #555;
+}
+
+/* ── Compact Track Tags ── */
+.tracks-compact {
+  display: flex; flex-wrap: wrap; gap: 10px;
+}
+.track-tag {
+  display: inline-block; padding: 6px 18px;
+  background: rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 50px; font-size: 0.82rem; color: var(--navy);
+  letter-spacing: 0.5px;
+}
+
 /* ── What's Next ── */
 .whats-next {
   padding: 56px 8%;

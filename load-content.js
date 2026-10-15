@@ -145,11 +145,18 @@ export async function loadConferenceContent() {
                 const tracks = [];
                 trackSnap.forEach(d => tracks.push(d.data()));
                 tracks.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
-                tracksGrid.innerHTML = tracks.map(t => `
-                    <div class="schedule-card">
-                        <h4>${esc(t.name)}</h4>
-                        ${t.description ? '<p>' + esc(t.description) + '</p>' : ''}
-                    </div>`).join('');
+                // Compact layout if container has tracks-compact class, otherwise full cards
+                if (tracksGrid.classList.contains('tracks-compact')) {
+                    tracksGrid.innerHTML = tracks.map(t =>
+                        `<span class="track-tag">${esc(t.name)}</span>`
+                    ).join('');
+                } else {
+                    tracksGrid.innerHTML = tracks.map(t => `
+                        <div class="schedule-card">
+                            <h4>${esc(t.name)}</h4>
+                            ${t.description ? '<p>' + esc(t.description) + '</p>' : ''}
+                        </div>`).join('');
+                }
             }
         }
 
