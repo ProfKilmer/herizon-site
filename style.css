@@ -559,7 +559,7 @@ footer {
 /* ── What's Next ── */
 .whats-next {
   padding: 56px 8%;
-  background: var(--ivory);
+  background: #f0ede8;
   text-align: center;
 }
 .whats-next h2 {
@@ -568,7 +568,7 @@ footer {
   color: var(--navy); margin-bottom: 20px;
 }
 .whats-next p {
-  max-width: 680px; margin: 0 auto;
+  max-width: 900px; margin: 0 auto;
   font-size: 1.05rem; color: #555; line-height: 1.8;
 }
 
