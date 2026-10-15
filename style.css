@@ -513,9 +513,101 @@ footer {
   margin: 0 auto 24px; text-align: center; opacity: 0.7;
 }
 
+/* ── Inaugural Conference Stats ── */
+.conf-recap {
+  padding: 80px 8%;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--plum) 100%);
+  color: #fff; text-align: center;
+}
+.conf-recap-label {
+  display: inline-block; font-size: 0.75rem; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--warm-gold); margin-bottom: 12px;
+}
+.conf-recap h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 700; margin-bottom: 12px; color: #fff;
+}
+.conf-recap > p {
+  max-width: 640px; margin: 0 auto 48px; font-size: 1rem;
+  color: rgba(255,255,255,0.75); line-height: 1.7;
+}
+.conf-stats-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 32px; max-width: 960px; margin: 0 auto;
+}
+.conf-stat {
+  padding: 28px 16px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  transition: transform 0.3s, background 0.3s;
+}
+.conf-stat:hover {
+  transform: translateY(-4px);
+  background: rgba(255,255,255,0.1);
+}
+.conf-stat-number {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700; color: var(--warm-gold);
+  line-height: 1.1; margin-bottom: 8px;
+}
+.conf-stat-desc {
+  font-size: 0.85rem; color: rgba(255,255,255,0.8);
+  line-height: 1.5; letter-spacing: 0.3px;
+}
+
+/* ── What's Next ── */
+.whats-next {
+  padding: 72px 8%;
+  background: var(--ivory);
+  text-align: center;
+}
+.whats-next h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+  color: var(--navy); margin-bottom: 20px;
+}
+.whats-next p {
+  max-width: 680px; margin: 0 auto;
+  font-size: 1.05rem; color: #555; line-height: 1.8;
+}
+
+/* ── Stay Connected ── */
+.stay-connected {
+  padding: 72px 8%;
+  background: linear-gradient(135deg, var(--navy) 0%, var(--plum) 100%);
+  text-align: center; color: #fff;
+}
+.stay-connected h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(1.6rem, 3.5vw, 2.2rem);
+  color: #fff; margin-bottom: 16px;
+}
+.stay-connected p {
+  max-width: 600px; margin: 0 auto 32px;
+  font-size: 1.05rem; color: rgba(255,255,255,0.8); line-height: 1.7;
+}
+.btn-mailing-list {
+  display: inline-block; padding: 16px 44px;
+  background: var(--warm-gold); color: var(--navy);
+  font-size: 0.85rem; letter-spacing: 2px;
+  text-transform: uppercase; font-weight: 600;
+  text-decoration: none; border-radius: 4px;
+  transition: all 0.3s;
+}
+.btn-mailing-list:hover {
+  background: #b89640; transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+
 /* ── Responsive ── */
 @media (max-width: 1024px) and (min-width: 769px) {
   .speakers-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 1024px) and (min-width: 769px) {
+  .conf-stats-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 768px) {
   .hamburger { display: flex; }
@@ -529,6 +621,8 @@ footer {
   .connect-grid { grid-template-columns: 1fr; }
   .conf-tabs { gap: 8px; }
   .speakers-grid { grid-template-columns: 1fr; }
+  .conf-stats-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .conf-stat { padding: 24px 12px; }
   .sponsor-tier-logos { gap: 24px; }
   .sponsor-logo-platinum { max-width: 150px; max-height: 75px; }
   .sponsor-logo-gold { max-width: 110px; max-height: 55px; }
