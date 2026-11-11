@@ -455,10 +455,10 @@ nav {
 }
 .ambassador-card h4 {
   font-family: 'Playfair Display', serif;
-  font-size: 0.95rem; color: #fff; margin-bottom: 4px;
+  font-size: 0.95rem; color: var(--navy); margin-bottom: 4px;
 }
 .ambassador-bio {
-  font-size: 0.78rem; color: rgba(255,255,255,0.7); line-height: 1.5;
+  font-size: 0.78rem; color: #555; line-height: 1.5;
 }
 
 .pillar-icon-circle {
