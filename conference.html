@@ -42,6 +42,7 @@
         <button class="conf-tab" onclick="showConfTab('speakers', this)">Speakers</button>
         <button class="conf-tab" onclick="showConfTab('schedule', this)">Schedule</button>
         <button class="conf-tab" onclick="showConfTab('faqs', this)">FAQs</button>
+        <button class="conf-tab" onclick="showConfTab('testimonials', this)">Testimonials</button>
         <button class="conf-tab" onclick="showConfTab('register', this)">Register</button>
         <button class="conf-tab" onclick="showConfTab('sponsors', this)">Sponsors</button>
     </div>
@@ -111,6 +112,21 @@
                 <h2>Frequently Asked Questions</h2>
 
                 <div class="faq-list"></div>
+            </div>
+        </div>
+
+        <!-- Testimonials Panel -->
+        <div id="testimonials" class="conf-panel">
+            <div class="section">
+                <h2>What Attendees Are Saying</h2>
+                <p style="max-width: 680px; margin: 0 auto 40px; text-align: center; color: #555;">Reflections from students who attended the 2026 National High School Women's Conference.</p>
+
+                <!-- Featured Testimonials -->
+                <div id="featuredTestimonials" class="testimonials-featured"></div>
+
+                <!-- Additional Testimonials -->
+                <h3 style="margin-top: 48px; margin-bottom: 20px; text-align: center;">More Voices from the Conference</h3>
+                <div id="additionalTestimonials" class="testimonials-grid"></div>
             </div>
         </div>
 
@@ -188,7 +204,7 @@
         // On page load or hash change, activate the correct tab
         function activateTabFromHash() {
             const hash = window.location.hash.replace('#', '');
-            const validTabs = ['overview', 'speakers', 'schedule', 'faqs', 'register', 'sponsors'];
+            const validTabs = ['overview', 'speakers', 'schedule', 'faqs', 'testimonials', 'register', 'sponsors'];
             if (hash && validTabs.includes(hash)) {
                 const btn = document.querySelector('.conf-tab[onclick*="' + hash + '"]');
                 if (btn) showConfTab(hash, btn);
