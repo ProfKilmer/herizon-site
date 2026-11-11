@@ -701,12 +701,82 @@ footer {
 .lightbox-next { right: 16px; }
 .lightbox-prev:hover, .lightbox-next:hover { color: #fff; }
 
+/* ── Testimonials ── */
+.testimonials-featured {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.testimonial-featured-card {
+  background: linear-gradient(135deg, var(--navy) 0%, var(--plum) 100%);
+  border-radius: 14px;
+  padding: 36px 30px 32px;
+  color: #fff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+.testimonial-featured-card::before {
+  content: '\201C';
+  font-family: 'Playfair Display', serif;
+  font-size: 4rem;
+  color: var(--warm-gold);
+  line-height: 1;
+  position: absolute;
+  top: 18px; left: 24px;
+  opacity: 0.5;
+}
+.testimonial-featured-card blockquote {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: rgba(255,255,255,0.9);
+  margin: 24px 0 0 0;
+  flex: 1;
+  font-style: italic;
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.testimonial-card {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.07);
+  border-radius: 12px;
+  padding: 28px 24px;
+  position: relative;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.testimonial-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.07);
+}
+.testimonial-card::before {
+  content: '\201C';
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  color: var(--warm-gold);
+  line-height: 1;
+  opacity: 0.4;
+}
+.testimonial-card blockquote {
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: #444;
+  font-style: italic;
+  margin: 4px 0 0 0;
+}
+
 /* ── Responsive ── */
 @media (max-width: 1024px) and (min-width: 769px) {
   .speakers-grid { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 1024px) and (min-width: 769px) {
   .conf-stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .testimonials-featured { grid-template-columns: 1fr; max-width: 600px; }
 }
 @media (max-width: 768px) {
   .hamburger { display: flex; }
@@ -737,4 +807,7 @@ footer {
   .lightbox-prev, .lightbox-next { font-size: 2rem; }
   .lightbox-prev { left: 6px; }
   .lightbox-next { right: 6px; }
+  .testimonials-featured { grid-template-columns: 1fr; max-width: 500px; margin: 0 auto; }
+  .testimonials-grid { grid-template-columns: 1fr; }
+  .testimonial-featured-card { padding: 28px 22px 24px; }
 }

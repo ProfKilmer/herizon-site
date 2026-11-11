@@ -237,7 +237,61 @@ export async function loadConferenceContent() {
         }
         // Gallery
         await loadGallery();
+        // Testimonials
+        await loadTestimonials();
     } catch (e) { console.log('Using static conference content.'); }
+}
+
+// Load testimonials for conference page
+export async function loadTestimonials() {
+    try {
+        const snap = await getDocs(collection(db, 'testimonials'));
+        const featuredContainer = document.getElementById('featuredTestimonials');
+        const additionalContainer = document.getElementById('additionalTestimonials');
+        if (!featuredContainer && !additionalContainer) return;
+        const moreVoicesHeading = additionalContainer ? additionalContainer.previousElementSibling : null;
+
+        if (snap.empty) {
+            // Hide the entire testimonials content when empty
+            if (featuredContainer) featuredContainer.innerHTML = '';
+            if (additionalContainer) additionalContainer.innerHTML = '';
+            if (moreVoicesHeading && moreVoicesHeading.tagName === 'H3') moreVoicesHeading.style.display = 'none';
+            return;
+        }
+
+        const items = [];
+        snap.forEach(d => items.push(d.data()));
+        items.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+
+        const featured = items.filter(t => t.category === 'featured');
+        const additional = items.filter(t => t.category === 'additional');
+
+        if (featuredContainer) {
+            if (featured.length > 0) {
+                featuredContainer.innerHTML = featured.map(t =>
+                    `<div class="testimonial-featured-card">
+                        <blockquote>${esc(t.quote)}</blockquote>
+                    </div>`
+                ).join('');
+            } else {
+                featuredContainer.innerHTML = '';
+            }
+        }
+
+        if (additionalContainer) {
+            if (additional.length > 0) {
+                additionalContainer.innerHTML = additional.map(t =>
+                    `<div class="testimonial-card">
+                        <blockquote>${esc(t.quote)}</blockquote>
+                    </div>`
+                ).join('');
+                if (moreVoicesHeading && moreVoicesHeading.tagName === 'H3') moreVoicesHeading.style.display = '';
+            } else {
+                additionalContainer.innerHTML = '';
+                if (moreVoicesHeading && moreVoicesHeading.tagName === 'H3') moreVoicesHeading.style.display = 'none';
+            }
+        }
+    } catch (e) { console.log('Testimonials load error:', e); }
 }
 
 // Load mission content

@@ -201,6 +201,7 @@
             <div class="sidebar-item" onclick="showSection('mission', this)">Mission</div>
             <div class="sidebar-item" onclick="showSection('about', this)">About</div>
             <div class="sidebar-item" onclick="showSection('gallery', this)">Gallery</div>
+            <div class="sidebar-item" onclick="showSection('testimonials', this)">Testimonials</div>
             <div class="sidebar-item" onclick="showSection('discussions', this)">Discussions</div>
             <div class="sidebar-item" onclick="showSection('connect', this)">Connect</div>
         </div>
@@ -495,6 +496,43 @@
                 <div id="galleryList" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:16px;"></div>
             </div>
 
+            <!-- TESTIMONIALS Section -->
+            <div id="section-testimonials" class="admin-section">
+                <h2>Testimonials</h2>
+                <p class="section-desc">Manage attendee testimonials shown on the Conference page. Designate each as Featured (prominent display) or Additional (grid).</p>
+
+                <button class="btn-add" onclick="showAddForm('testimonials')">+ Add Testimonial</button>
+                <button class="btn-add" id="seedTestimonialsBtn" style="display:none; background: var(--warm-gold); color: var(--navy); margin-left: 12px;" onclick="seedTestimonials()">Import Initial Testimonials</button>
+                <div id="testimonialsForm" style="display:none;">
+                    <div class="admin-form">
+                        <h3 id="testimonialsFormTitle">Add Testimonial</h3>
+                        <input type="hidden" id="testimonialEditId">
+                        <div class="form-row">
+                            <label>Quote</label>
+                            <textarea id="testimonialQuote" placeholder="Enter the testimonial text..." style="min-height:120px;"></textarea>
+                        </div>
+                        <div class="form-row">
+                            <label>Category</label>
+                            <select id="testimonialCategory">
+                                <option value="featured">Featured (prominent display)</option>
+                                <option value="additional">Additional (grid display)</option>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <label>Sort Order (lower numbers appear first within category)</label>
+                            <input type="number" id="testimonialSortOrder" placeholder="e.g. 1, 2, 3..." value="0">
+                        </div>
+                        <button class="btn-save" onclick="saveTestimonial()">Save</button>
+                        <button class="btn-cancel" onclick="hideForm('testimonials')">Cancel</button>
+                    </div>
+                </div>
+
+                <h3 style="margin: 20px 0 12px; font-family: 'Playfair Display', serif; color: var(--navy);">Featured</h3>
+                <div id="testimonialsFeaturedList"></div>
+                <h3 style="margin: 28px 0 12px; font-family: 'Playfair Display', serif; color: var(--navy);">Additional</h3>
+                <div id="testimonialsAdditionalList"></div>
+            </div>
+
             <!-- MISSION Section -->
             <div id="section-mission" class="admin-section">
                 <h2>Mission</h2>
@@ -727,6 +765,7 @@
         await loadDiscussions();
         await loadConnect();
         await loadGallery();
+        await loadTestimonials();
     }
     window.loadAllData = loadAllData;
 
@@ -756,6 +795,44 @@
         if (items.length === 0) list.innerHTML = '<p style="color:#888; grid-column: 1/-1;">No gallery photos yet. Click "+ Add Photo" to get started.</p>';
     }
     window.loadGallery = loadGallery;
+
+    // ── TESTIMONIALS ──
+    async function loadTestimonials() {
+        const snap = await getDocs(collection(db, 'testimonials'));
+        const featuredList = document.getElementById('testimonialsFeaturedList');
+        const additionalList = document.getElementById('testimonialsAdditionalList');
+        featuredList.innerHTML = '';
+        additionalList.innerHTML = '';
+        const items = [];
+        snap.forEach(d => items.push({ id: d.id, ...d.data() }));
+        items.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+        window._testimonialItems = items;
+
+        const seedBtn = document.getElementById('seedTestimonialsBtn');
+        if (seedBtn) seedBtn.style.display = items.length === 0 ? 'inline-block' : 'none';
+
+        const featured = items.filter(t => t.category === 'featured');
+        const additional = items.filter(t => t.category === 'additional');
+
+        function renderCard(item) {
+            const shortQuote = item.quote && item.quote.length > 120 ? item.quote.substring(0, 120) + '...' : item.quote;
+            return `<div class="admin-card">
+                <div class="card-actions">
+                    <button class="btn-edit" onclick="editTestimonial('${item.id}')">Edit</button>
+                    <button class="btn-delete" onclick="deleteItem('testimonials', '${item.id}')">Delete</button>
+                </div>
+                <h4 style="font-style:italic;font-weight:400;color:#444;">"${esc(shortQuote)}"</h4>
+                <div class="card-subtitle">${esc(item.category === 'featured' ? 'Featured' : 'Additional')} · Sort: ${item.sortOrder || 0}</div>
+            </div>`;
+        }
+
+        featured.forEach(item => { featuredList.innerHTML += renderCard(item); });
+        additional.forEach(item => { additionalList.innerHTML += renderCard(item); });
+
+        if (featured.length === 0) featuredList.innerHTML = '<p style="color:#888;">No featured testimonials.</p>';
+        if (additional.length === 0) additionalList.innerHTML = '<p style="color:#888;">No additional testimonials.</p>';
+    }
+    window.loadTestimonials = loadTestimonials;
 
     // ── TEAM ──
     async function loadTeam() {
@@ -1153,6 +1230,12 @@
             document.getElementById('galleryCaption').value = '';
             document.getElementById('gallerySortOrder').value = '0';
             document.getElementById('galleryFormTitle').textContent = 'Add Photo';
+        } else if (type === 'testimonials') {
+            document.getElementById('testimonialEditId').value = '';
+            document.getElementById('testimonialQuote').value = '';
+            document.getElementById('testimonialCategory').value = 'additional';
+            document.getElementById('testimonialSortOrder').value = '0';
+            document.getElementById('testimonialsFormTitle').textContent = 'Add Testimonial';
         }
     }
 
@@ -1607,6 +1690,90 @@
     }
     window.deleteGalleryPhoto = deleteGalleryPhoto;
 
+    // ── TESTIMONIAL SAVES ──
+    async function saveTestimonial() {
+        const id = document.getElementById('testimonialEditId').value;
+        const quote = document.getElementById('testimonialQuote').value.trim();
+        const category = document.getElementById('testimonialCategory').value;
+        const sortOrder = parseInt(document.getElementById('testimonialSortOrder').value) || 0;
+
+        if (!quote) { showStatus('Please enter a quote.', 'error'); return; }
+
+        const data = { quote, category, sortOrder, updatedAt: new Date().toISOString() };
+
+        try {
+            if (id) {
+                await window._updateDoc(window._doc(window._db, 'testimonials', id), data);
+                showStatus('Testimonial updated!', 'success');
+            } else {
+                data.createdAt = new Date().toISOString();
+                await window._addDoc(window._collection(window._db, 'testimonials'), data);
+                showStatus('Testimonial added!', 'success');
+            }
+            hideForm('testimonials');
+            await window.loadTestimonials();
+        } catch (e) { showStatus('Error: ' + e.message, 'error'); }
+    }
+    window.saveTestimonial = saveTestimonial;
+
+    function editTestimonial(id) {
+        const items = window._testimonialItems || [];
+        const item = items.find(i => i.id === id);
+        if (!item) { showStatus('Testimonial not found.', 'error'); return; }
+
+        document.getElementById('testimonialEditId').value = id;
+        document.getElementById('testimonialQuote').value = item.quote || '';
+        document.getElementById('testimonialCategory').value = item.category || 'additional';
+        document.getElementById('testimonialSortOrder').value = item.sortOrder || 0;
+        document.getElementById('testimonialsFormTitle').textContent = 'Edit Testimonial';
+        document.getElementById('testimonialsForm').style.display = 'block';
+    }
+    window.editTestimonial = editTestimonial;
+
+    async function seedTestimonials() {
+        if (!confirm('This will add 14 initial testimonials (3 Featured + 11 Additional). Continue?')) return;
+
+        const featured = [
+            "During the education panel, I was most impacted by what the panelists shared about how men will go for a job/opportunity when they meet 3/5 of the requirements, but if girls don’t meet 1/5 they will often not choose to apply. I find myself often shying away from answering questions in math class because I’m scared of being wrong when I feel like I absolutely need to be right to prove that I belong in the classroom. So I promised myself that I would speak up more in math and be okay with maybe being wrong and failing because that’s how you learn.",
+            "It was so amazing to see your hard work being put to life last week! I truly enjoyed watching the panels and listening to people speak. Your work is truly inspiring.",
+            "We need to not always try to win but work together with others. Negotiation is about collaboration, not persuasion."
+        ];
+
+        const additional = [
+            "One thing that stood out to me was the education panel. Everything that the heads of schools were saying really resonated with me as a high school student, and made me feel very seen by my educators.",
+            "Mentally healthy does not mean happy all the time.",
+            "Appreciate yourself for who you are.",
+            "You don’t need to be perfect and you can’t please everybody.",
+            "The idea that failure is going to happen but you have to be able to move on and grow in every part of life.",
+            "Skill Stacking from Dr. Kwo and the career panel.",
+            "The idea of perfectionism actually hurts us more than helps.",
+            "The strength of the women on the education panel and just hearing them speak was truly so inspiring. I was in awe of them the entire time!",
+            "To be resilient but set boundaries. You can’t please everybody.",
+            "Be a girls girl and help other girls when they need it.",
+            "Girls standing up and advocating from a young age - Making it a habit."
+        ];
+
+        try {
+            const now = new Date().toISOString();
+            for (let i = 0; i < featured.length; i++) {
+                await window._addDoc(window._collection(window._db, 'testimonials'), {
+                    quote: featured[i], category: 'featured', sortOrder: i + 1,
+                    createdAt: now, updatedAt: now
+                });
+            }
+            for (let i = 0; i < additional.length; i++) {
+                await window._addDoc(window._collection(window._db, 'testimonials'), {
+                    quote: additional[i], category: 'additional', sortOrder: i + 1,
+                    createdAt: now, updatedAt: now
+                });
+            }
+            showStatus('14 testimonials seeded successfully!', 'success');
+            document.getElementById('seedTestimonialsBtn').style.display = 'none';
+            await window.loadTestimonials();
+        } catch (e) { showStatus('Error seeding: ' + e.message, 'error'); }
+    }
+    window.seedTestimonials = seedTestimonials;
+
     // ── CONNECT SAVES ──
     async function saveConnectInfo() {
         const existing = await window._getDoc(window._doc(window._db, 'settings', 'connect'));
@@ -1770,6 +1937,7 @@
             else if (collectionName === 'sponsors') await window.loadSponsors();
             else if (collectionName === 'faqs') await window.loadFaqs();
             else if (collectionName === 'discposts') await window.loadDiscussions();
+            else if (collectionName === 'testimonials') await window.loadTestimonials();
         } catch (e) { showStatus('Error: ' + e.message, 'error'); }
     }
     window.deleteItem = deleteItem;
