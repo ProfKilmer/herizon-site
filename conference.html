@@ -80,7 +80,8 @@
 
                 <!-- Photo Gallery -->
                 <h3 style="margin-top: 40px; margin-bottom: 12px;">Photo Gallery</h3>
-                <p style="color: #888; font-style: italic;">Photos from the 2026 conference will be posted soon!</p>
+                <div id="galleryGrid" class="gallery-grid"></div>
+
             </div>
         </div>
 
@@ -137,6 +138,17 @@
         </div>
     </div>
 
+    <!-- Lightbox (outside panels to avoid transform/stacking issues) -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+        <button class="lightbox-close" onclick="closeLightbox(event)">&times;</button>
+        <button class="lightbox-prev" onclick="navigateLightbox(-1, event)">&#8249;</button>
+        <div class="lightbox-content">
+            <img id="lightboxImg" src="" alt="">
+            <p id="lightboxCaption" class="lightbox-caption"></p>
+        </div>
+        <button class="lightbox-next" onclick="navigateLightbox(1, event)">&#8250;</button>
+    </div>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-container">
@@ -184,6 +196,41 @@
         }
         window.addEventListener('hashchange', activateTabFromHash);
         window.addEventListener('DOMContentLoaded', activateTabFromHash);
+
+        // Lightbox
+        let currentLightboxIndex = 0;
+        function openLightbox(index) {
+            const photos = window._galleryPhotos || [];
+            if (!photos.length) return;
+            currentLightboxIndex = index;
+            const photo = photos[index];
+            document.getElementById('lightboxImg').src = photo.url;
+            document.getElementById('lightboxCaption').textContent = photo.caption || '';
+            document.getElementById('lightbox').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeLightbox(e) {
+            if (e.target.classList.contains('lightbox') || e.target.classList.contains('lightbox-close')) {
+                document.getElementById('lightbox').classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+        function navigateLightbox(dir, e) {
+            e.stopPropagation();
+            const photos = window._galleryPhotos || [];
+            if (!photos.length) return;
+            currentLightboxIndex = (currentLightboxIndex + dir + photos.length) % photos.length;
+            const photo = photos[currentLightboxIndex];
+            document.getElementById('lightboxImg').src = photo.url;
+            document.getElementById('lightboxCaption').textContent = photo.caption || '';
+        }
+        document.addEventListener('keydown', function(e) {
+            const lb = document.getElementById('lightbox');
+            if (!lb || !lb.classList.contains('active')) return;
+            if (e.key === 'Escape') { lb.classList.remove('active'); document.body.style.overflow = ''; }
+            else if (e.key === 'ArrowLeft') navigateLightbox(-1, e);
+            else if (e.key === 'ArrowRight') navigateLightbox(1, e);
+        });
 
         // Toggle FAQ answers
         function toggleFaq(el) {

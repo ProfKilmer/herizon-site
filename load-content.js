@@ -235,6 +235,8 @@ export async function loadConferenceContent() {
                     </div>`).join('');
             }
         }
+        // Gallery
+        await loadGallery();
     } catch (e) { console.log('Using static conference content.'); }
 }
 
@@ -368,6 +370,34 @@ export async function loadConnectContent() {
         if (ttEl) { if (data.tiktok) { ttEl.href = data.tiktok; ttEl.style.display = ''; } else { ttEl.style.display = 'none'; } }
         if (xEl) { if (data.twitter) { xEl.href = data.twitter; xEl.style.display = ''; } else { xEl.style.display = 'none'; } }
     } catch (e) { console.log('Using static connect content.'); }
+}
+
+// Load photo gallery for conference overview
+export async function loadGallery() {
+    try {
+        const snap = await getDocs(collection(db, 'gallery'));
+        const container = document.getElementById('galleryGrid');
+        if (!container) return;
+
+        if (snap.empty) {
+            container.innerHTML = '<p style="color: #888; font-style: italic;">Photos from the 2026 conference will be posted soon!</p>';
+            return;
+        }
+
+        const items = [];
+        snap.forEach(d => items.push(d.data()));
+        items.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+
+        container.innerHTML = items.map((item, i) =>
+            `<div class="gallery-item" onclick="openLightbox(${i})">
+                <img src="${esc(item.url)}" alt="${esc(item.caption || 'Conference photo')}" loading="lazy">
+                ${item.caption ? '<div class="gallery-caption">' + esc(item.caption) + '</div>' : ''}
+            </div>`
+        ).join('');
+
+        // Store items globally for lightbox
+        window._galleryPhotos = items;
+    } catch (e) { console.log('Gallery load error:', e); }
 }
 
 // Load sponsor logos for homepage

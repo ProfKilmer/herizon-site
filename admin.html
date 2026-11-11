@@ -143,6 +143,33 @@
         }
         .status-msg.success { display: block; background: #e8f5e9; color: #2e7d32; }
         .status-msg.error { display: block; background: #ffebee; color: #c62828; }
+
+        /* Gallery admin cards */
+        .gallery-admin-card {
+            background: #fff; border: 1px solid rgba(0,0,0,0.08); border-radius: 12px;
+            overflow: hidden; position: relative;
+        }
+        .gallery-admin-card img {
+            width: 100%; height: 160px; object-fit: cover; display: block;
+        }
+        .gallery-admin-card .gallery-card-info {
+            padding: 12px 14px;
+        }
+        .gallery-admin-card .gallery-card-info p {
+            font-size: 0.85rem; color: #555; margin-bottom: 4px;
+        }
+        .gallery-admin-card .gallery-card-info .gallery-order {
+            font-size: 0.78rem; color: #999;
+        }
+        .gallery-admin-card .gallery-card-actions {
+            display: flex; gap: 6px; padding: 0 14px 12px;
+        }
+        .gallery-admin-card .gallery-card-actions button {
+            padding: 5px 12px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.12);
+            background: #fff; cursor: pointer; font-size: 0.78rem;
+        }
+        .gallery-admin-card .gallery-card-actions .btn-edit:hover { background: var(--warm-gold); color: var(--navy); border-color: var(--warm-gold); }
+        .gallery-admin-card .gallery-card-actions .btn-delete:hover { background: #d32f2f; color: #fff; border-color: #d32f2f; }
     </style>
 </head>
 <body>
@@ -173,6 +200,7 @@
             <div class="sidebar-item" onclick="showSection('conference', this)">Conference</div>
             <div class="sidebar-item" onclick="showSection('mission', this)">Mission</div>
             <div class="sidebar-item" onclick="showSection('about', this)">About</div>
+            <div class="sidebar-item" onclick="showSection('gallery', this)">Gallery</div>
             <div class="sidebar-item" onclick="showSection('discussions', this)">Discussions</div>
             <div class="sidebar-item" onclick="showSection('connect', this)">Connect</div>
         </div>
@@ -436,6 +464,37 @@
                 <div id="faqsList"></div>
             </div>
 
+            <!-- GALLERY Section -->
+            <div id="section-gallery" class="admin-section">
+                <h2>Photo Gallery</h2>
+                <p class="section-desc">Manage conference photos. Upload, caption, reorder, and delete gallery images.</p>
+
+                <button class="btn-add" onclick="showAddForm('gallery')">+ Add Photo</button>
+                <div id="galleryForm" style="display:none;">
+                    <div class="admin-form">
+                        <h3 id="galleryFormTitle">Add Photo</h3>
+                        <input type="hidden" id="galleryEditId">
+                        <div class="form-row">
+                            <label>Photo</label>
+                            <input type="file" id="galleryPhotoFile" accept="image/*" style="padding:8px;">
+                            <div id="galleryPhotoPreview" style="margin-top:8px;"></div>
+                            <input type="hidden" id="galleryPhotoURL">
+                        </div>
+                        <div class="form-row">
+                            <label>Caption (shown under the photo)</label>
+                            <input type="text" id="galleryCaption" placeholder="e.g. Students networking during the lunch break">
+                        </div>
+                        <div class="form-row">
+                            <label>Sort Order (lower numbers appear first)</label>
+                            <input type="number" id="gallerySortOrder" placeholder="e.g. 1, 2, 3..." value="0">
+                        </div>
+                        <button class="btn-save" onclick="saveGalleryPhoto()">Save</button>
+                        <button class="btn-cancel" onclick="hideForm('gallery')">Cancel</button>
+                    </div>
+                </div>
+                <div id="galleryList" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap:16px;"></div>
+            </div>
+
             <!-- MISSION Section -->
             <div id="section-mission" class="admin-section">
                 <h2>Mission</h2>
@@ -667,8 +726,36 @@
         await loadAbout();
         await loadDiscussions();
         await loadConnect();
+        await loadGallery();
     }
     window.loadAllData = loadAllData;
+
+    // ── GALLERY ──
+    async function loadGallery() {
+        const snap = await getDocs(collection(db, 'gallery'));
+        const list = document.getElementById('galleryList');
+        list.innerHTML = '';
+        const items = [];
+        snap.forEach(d => items.push({ id: d.id, ...d.data() }));
+        items.sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0));
+        window._galleryItems = items;
+        items.forEach(item => {
+            list.innerHTML += `
+                <div class="gallery-admin-card">
+                    ${item.url ? '<img src="' + esc(item.url) + '" alt="' + esc(item.caption || 'Gallery photo') + '">' : ''}
+                    <div class="gallery-card-info">
+                        <p>${esc(item.caption || 'No caption')}</p>
+                        <span class="gallery-order">Sort order: ${item.sortOrder || 0}</span>
+                    </div>
+                    <div class="gallery-card-actions">
+                        <button class="btn-edit" onclick="editGalleryPhoto('${item.id}')">Edit</button>
+                        <button class="btn-delete" onclick="deleteGalleryPhoto('${item.id}')">Delete</button>
+                    </div>
+                </div>`;
+        });
+        if (items.length === 0) list.innerHTML = '<p style="color:#888; grid-column: 1/-1;">No gallery photos yet. Click "+ Add Photo" to get started.</p>';
+    }
+    window.loadGallery = loadGallery;
 
     // ── TEAM ──
     async function loadTeam() {
@@ -1058,6 +1145,14 @@
             document.getElementById('discpostTitle').value = '';
             document.getElementById('discpostBody').value = '';
             document.getElementById('discpostsFormTitle').textContent = 'Add Featured Post';
+        } else if (type === 'gallery') {
+            document.getElementById('galleryEditId').value = '';
+            document.getElementById('galleryPhotoFile').value = '';
+            document.getElementById('galleryPhotoPreview').innerHTML = '';
+            document.getElementById('galleryPhotoURL').value = '';
+            document.getElementById('galleryCaption').value = '';
+            document.getElementById('gallerySortOrder').value = '0';
+            document.getElementById('galleryFormTitle').textContent = 'Add Photo';
         }
     }
 
@@ -1423,6 +1518,94 @@
         } catch (e) { showStatus('Error: ' + e.message, 'error'); }
     }
     window.saveDiscPost = saveDiscPost;
+
+    // ── GALLERY SAVE ──
+    async function saveGalleryPhoto() {
+        const editId = document.getElementById('galleryEditId').value;
+        const fileInput = document.getElementById('galleryPhotoFile');
+        const existingURL = document.getElementById('galleryPhotoURL').value;
+        let photoURL = existingURL;
+        let storagePath = '';
+
+        // Upload photo if a new file was selected
+        if (fileInput.files && fileInput.files[0]) {
+            showStatus('Uploading photo...', 'success');
+            try {
+                const file = fileInput.files[0];
+                const fileName = Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._-]/g, '');
+                storagePath = 'gallery/' + fileName;
+                const storageRef = window._ref(window._storage, storagePath);
+                await window._uploadBytes(storageRef, file);
+                photoURL = await window._getDownloadURL(storageRef);
+            } catch (e) {
+                showStatus('Photo upload failed: ' + e.message, 'error');
+                return;
+            }
+        } else if (!existingURL && !editId) {
+            showStatus('Please select a photo to upload.', 'error');
+            return;
+        }
+
+        const data = {
+            url: photoURL,
+            caption: document.getElementById('galleryCaption').value,
+            sortOrder: parseInt(document.getElementById('gallerySortOrder').value) || 0
+        };
+        if (storagePath) data.storagePath = storagePath;
+
+        try {
+            if (editId) {
+                // Preserve existing storagePath if not re-uploading
+                if (!storagePath) {
+                    const existing = (window._galleryItems || []).find(g => g.id === editId);
+                    if (existing && existing.storagePath) data.storagePath = existing.storagePath;
+                }
+                await window._updateDoc(window._doc(window._db, 'gallery', editId), data);
+            } else {
+                await window._addDoc(window._collection(window._db, 'gallery'), data);
+            }
+            hideForm('gallery');
+            showStatus('Gallery photo saved!', 'success');
+            await window.loadGallery();
+        } catch (e) { showStatus('Error: ' + e.message, 'error'); }
+    }
+    window.saveGalleryPhoto = saveGalleryPhoto;
+
+    function editGalleryPhoto(id) {
+        const item = (window._galleryItems || []).find(g => g.id === id);
+        if (!item) { showStatus('Could not find photo to edit.', 'error'); return; }
+        document.getElementById('galleryForm').style.display = 'block';
+        document.getElementById('galleryFormTitle').textContent = 'Edit Photo';
+        document.getElementById('galleryEditId').value = id;
+        document.getElementById('galleryPhotoURL').value = item.url || '';
+        document.getElementById('galleryPhotoFile').value = '';
+        document.getElementById('galleryPhotoPreview').innerHTML = item.url
+            ? '<img src="' + item.url + '" style="width:120px;height:80px;border-radius:8px;object-fit:cover;"><span style="font-size:0.8rem;color:#888;margin-left:8px;">Current photo. Choose a new file to replace.</span>'
+            : '';
+        document.getElementById('galleryCaption').value = item.caption || '';
+        document.getElementById('gallerySortOrder').value = item.sortOrder || 0;
+    }
+    window.editGalleryPhoto = editGalleryPhoto;
+
+    async function deleteGalleryPhoto(id) {
+        if (!confirm('Are you sure you want to delete this photo?')) return;
+        try {
+            // Look up storagePath from cached items
+            const item = (window._galleryItems || []).find(g => g.id === id);
+            const storagePath = item ? item.storagePath : '';
+            // Delete from Storage if path exists
+            if (storagePath) {
+                try {
+                    const storageRef = window._ref(window._storage, storagePath);
+                    await window._deleteObject(storageRef);
+                } catch (e) { console.log('Storage delete skipped:', e.message); }
+            }
+            await window._deleteDoc(window._doc(window._db, 'gallery', id));
+            showStatus('Photo deleted.', 'success');
+            await window.loadGallery();
+        } catch (e) { showStatus('Error: ' + e.message, 'error'); }
+    }
+    window.deleteGalleryPhoto = deleteGalleryPhoto;
 
     // ── CONNECT SAVES ──
     async function saveConnectInfo() {
